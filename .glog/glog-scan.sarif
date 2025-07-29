@@ -1,0 +1,677 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Glog.AI",
+          "organization": "Glog.AI",
+          "fullName": "Glog, Making software more secure",
+          "version": "1.0.0",
+          "semanticVersion": "1.0.0",
+          "informationUri": "https://www.glog.ai",
+          "rules": [
+            {
+              "id": "glog-7127fa4a-5d1a-46f9-9cdc-85cb29abef99",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe \"Code Injection Vulnerability in GitHub Actions Using Untrusted `github` Context Data\" refers to a security flaw where untrusted data from the `github` context is used to construct shell commands. This can lead to code injection if the data is not properly sanitized, allowing an attacker to execute arbitrary commands within the GitHub Actions environment. In the provided code snippet, the `TOOL_CMD` variable is constructed using inputs from the `github` context without proper validation or sanitization, making it susceptible to injection attacks.\n\n### General Mitigation Advice\n\n1. **Input Validation and Sanitization**: Always validate and sanitize inputs from untrusted sources. Use whitelisting to allow only expected values.\n2. **Use Safe APIs**: Prefer using APIs or libraries that handle input safely, avoiding direct shell command construction.\n3. **Environment Isolation**: Run potentially dangerous commands in isolated environments where possible, such as containers with limited permissions.\n4. **Least Privilege Principle**: Ensure that the GitHub Actions workflow has the minimum permissions necessary to perform its tasks.\n\n### Source Code Fix Recommendation\n\nTo mitigate the vulnerability, avoid constructing shell commands directly with untrusted input. Instead, use parameterized commands or a safer method to handle inputs. Here's a revised version of the code:\n\n```yaml\nrun: |\n  TOOL_CMD=\"${{ github.action_path }}/glog.sh scan --path $GITHUB_WORKSPACE\"\n  ARGS=()\n  if [ ! -z \"${{ inputs.lang }}\" ]; then\n    ARGS+=(\"--lang\" \"${{ inputs.lang }}\")\n  fi\n  if [ ! -z \"${{ inputs.ignore }}\" ]; then\n    ARGS+=(\"--ignore\" \"${{ inputs.ignore }}\")\n  fi\n  if [ ! -z \"${{ inputs.client }}\" ]; then\n    ARGS+=(\"--client\" \"${{ inputs.client }}\")\n  fi\n  \"$TOOL_CMD\" \"${ARGS[@]}\"\n```\n\n### Library Dependencies\n\nThe code example provided is a shell script executed within a GitHub Actions workflow and does not require additional JavaScript library dependencies to execute. However, ensure that the `glog.sh` script and any tools it depends on are available in the environment.\n\n### OWASP Resources\n\n- [OWASP Command Injection](https://owasp.org/www-community/attacks/Command_Injection)\n- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-77: Improper Neutralization of Special Elements used in a Command ('Command Injection')](https://cwe.mitre.org/data/definitions/77.html)"
+              },
+              "properties": {
+                "tags": [
+                  "yaml.github-actions.security.run-shell-injection.run-shell-injection"
+                ]
+              }
+            },
+            {
+              "id": "glog-de6a7643-3523-41f7-9f53-84cb382a37f5",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nA \"Container Privilege Escalation Vulnerability\" in the context of JavaScript applications typically refers to a security flaw that allows an attacker to gain elevated privileges within a containerized environment. This can occur when a JavaScript application running inside a container is misconfigured or when the container itself is not properly secured, allowing an attacker to exploit the application to gain unauthorized access to the host system or other containers.\n\nIn the provided example, the `ENTRYPOINT [\"npm\", \"start\"]` command is used to start a Node.js application. If the application or its dependencies have vulnerabilities, or if the container is running with excessive privileges, an attacker could potentially exploit these weaknesses to escalate their privileges.\n\n### General Mitigation Advice\n\n1. **Least Privilege**: Run containers with the least privileges necessary. Avoid running containers as the root user unless absolutely necessary.\n2. **Update Regularly**: Keep the Node.js runtime and all dependencies up to date to mitigate known vulnerabilities.\n3. **Use Security Tools**: Employ tools like Docker Bench for Security to audit your container configurations.\n4. **Network Segmentation**: Isolate containers in different network segments to limit the impact of a potential breach.\n5. **Read-Only Filesystem**: Use a read-only filesystem for containers to prevent unauthorized changes.\n6. **Limit Capabilities**: Drop unnecessary Linux capabilities using Docker's `--cap-drop` flag.\n7. **Use Trusted Images**: Base your containers on trusted and verified images from official repositories.\n\n### Source Code Fix Recommendation\n\nTo mitigate the risk of privilege escalation, ensure that your Dockerfile and container configurations adhere to security best practices. Here is an example of a more secure Dockerfile configuration:\n\n```dockerfile\nFROM node:14-alpine\n\n# Create and change to a non-root user\nRUN addgroup -S appgroup && adduser -S appuser -G appgroup\nUSER appuser\n\n# Set working directory\nWORKDIR /usr/src/app\n\n# Copy application files\nCOPY package*.json ./\nCOPY . .\n\n# Install dependencies\nRUN npm install --only=production\n\n# Start the application\nENTRYPOINT [\"npm\", \"start\"]\n```\n\n### Library Dependencies\n\nThe following dependencies are required for the code example to execute properly:\n\n- Node.js (version 14 or compatible)\n- npm (Node Package Manager)\n\n### OWASP Resources\n\n- [OWASP Docker Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html)\n- [OWASP Node.js Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-269: Improper Privilege Management](https://cwe.mitre.org/data/definitions/269.html)\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
+              },
+              "properties": {
+                "tags": [
+                  "dockerfile.security.missing-user-entrypoint.missing-user-entrypoint"
+                ]
+              }
+            },
+            {
+              "id": "glog-c4fc7c02-5ad7-4bdc-84f6-7125e20e1df2",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nSensitive Information Exposure in JavaScript occurs when an application inadvertently discloses sensitive data to unauthorized parties. This can happen through various means such as logging, error messages, or client-side code. In the provided code snippet, the hardcoded token is an example of sensitive information that could be exposed if the code is accessed by unauthorized users.\n\n### Mitigation Advice\n\n1. **Avoid Hardcoding Sensitive Data**: Do not hardcode sensitive information such as tokens, passwords, or API keys directly in your source code.\n2. **Environment Variables**: Store sensitive information in environment variables or secure configuration files that are not included in the source code repository.\n3. **Access Control**: Implement strict access control measures to ensure that only authorized users can access sensitive information.\n4. **Encryption**: Use encryption to protect sensitive data both at rest and in transit.\n5. **Logging and Monitoring**: Implement logging and monitoring to detect unauthorized access attempts and potential data leaks.\n\n### Source Code Fix Recommendation\n\nReplace the hardcoded token with an environment variable:\n\n```javascript\n// Load environment variables\nrequire('dotenv').config();\n\n// Access the token from environment variables\nvar token = process.env.SECRET_TOKEN;\n\n// Ensure the token is not undefined\nif (!token) {\n    console.error('Error: SECRET_TOKEN is not set in environment variables.');\n    process.exit(1);\n}\n```\n\n### Library Dependencies\n\nTo execute the code example properly, the following library is required:\n\n- `dotenv`: This library is used to load environment variables from a `.env` file into `process.env`.\n\nYou can install it using npm:\n\n```bash\nnpm install dotenv\n```\n\n### OWASP Resources\n\n- [OWASP Top Ten: Sensitive Data Exposure](https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-200: Exposure of Sensitive Information to an Unauthorized Actor](https://cwe.mitre.org/data/definitions/200.html)"
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.detected-generic-secret"
+                ]
+              }
+            },
+            {
+              "id": "glog-1c7c338d-78ae-4447-b455-3e3eef8311b5",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe \"Code Injection Vulnerability in GitHub Actions Using Untrusted `github` Context Data\" refers to a security flaw where untrusted data from the `github` context is used in a way that could allow an attacker to execute arbitrary code. In the provided example, the `github.actor` is used directly in a shell command without proper sanitization, which could lead to command injection if an attacker is able to manipulate this value.\n\n### Mitigation Advice\n\nTo mitigate this vulnerability, ensure that any data from the `github` context is properly sanitized before being used in shell commands. Avoid using untrusted data directly in shell commands. Instead, use parameterized inputs or escape the data properly.\n\n### Source Code Fix Recommendation\n\nTo fix the specific vulnerability in the provided code snippet, you can use the following approach:\n\n```yaml\nrun: |\n  echo \"${{ inputs.github-token }}\" | docker login ghcr.io -u \"${{ github.actor }}\" --password-stdin\n```\n\nIn this fix, the `${{ github.actor }}` is enclosed in double quotes to prevent command injection. Additionally, consider using a more secure method to handle sensitive data and avoid exposing it in logs.\n\n### Library Dependencies\n\nThe code example provided is a part of a GitHub Actions workflow and does not require any additional JavaScript library dependencies to execute. It relies on the GitHub Actions environment and Docker.\n\n### OWASP Resources\n\n- [OWASP Command Injection](https://owasp.org/www-community/attacks/Command_Injection)\n- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-77: Improper Neutralization of Special Elements used in a Command ('Command Injection')](https://cwe.mitre.org/data/definitions/77.html)"
+              },
+              "properties": {
+                "tags": [
+                  "yaml.github-actions.security.run-shell-injection.run-shell-injection"
+                ]
+              }
+            },
+            {
+              "id": "glog-cefa7ecb-4112-4ad3-ae27-c58cb2fe81a9",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe \"Dockerfile USER Misconfiguration Vulnerability\" refers to a security issue where a Docker container runs processes as the root user by default. This can lead to potential security risks, especially if the container is compromised, as it would have root access to the host system. In the context of a JavaScript application, this vulnerability can be particularly concerning if the application is exposed to the internet or handles sensitive data.\n\n### Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to specify a non-root user in the Dockerfile. This limits the permissions of the processes running inside the container, reducing the potential impact of a security breach.\n\n### Source Code Fix Recommendation\n\nTo address the vulnerability, modify the Dockerfile to include a non-root user. Here is an example of how you can update your Dockerfile:\n\n```dockerfile\n# Use an official Node.js runtime as a parent image\nFROM node:14\n\n# Create a non-root user and group\nRUN groupadd -r appuser && useradd -r -g appuser appuser\n\n# Set the working directory\nWORKDIR /usr/src/app\n\n# Copy application files\nCOPY . .\n\n# Install application dependencies\nRUN npm install\n\n# Change ownership of the application files\nRUN chown -R appuser:appuser /usr/src/app\n\n# Switch to the non-root user\nUSER appuser\n\n# Run the application\nENTRYPOINT [\"npm\", \"start\"]\n```\n\n### Library Dependencies\n\nTo execute the code example properly, the following library dependencies are required:\n\n- Node.js (version 14 or compatible)\n- npm (Node Package Manager)\n\n### OWASP Resources\n\n- [OWASP Docker Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html)\n- [OWASP Node.js Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)\n\nThese resources provide additional guidance on securing Docker containers and Node.js applications."
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.missing-user"
+                ]
+              }
+            },
+            {
+              "id": "glog-f4389141-97e4-4faf-80b5-503dcd6ced23",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe \"Writable Root Filesystem Vulnerability in 'goof-mongo' Service\" is a security issue that arises when a service running in a containerized environment, such as Docker, has its root filesystem set to writable. This can lead to unauthorized modifications of the filesystem, potentially allowing an attacker to alter application code, configurations, or other critical files. In the context of the 'goof-mongo' service, this vulnerability can be particularly dangerous as it may allow an attacker to manipulate MongoDB data or service configurations.\n\n### General Mitigation Advice\n\n1. **Set the Root Filesystem to Read-Only**: Configure the container to have a read-only root filesystem. This can be done by using the `--read-only` flag when running the Docker container.\n\n2. **Use Non-Root User**: Ensure that the application runs as a non-root user within the container to minimize the impact of a potential compromise.\n\n3. **Implement File Integrity Monitoring**: Use tools to monitor changes to critical files and alert on unauthorized modifications.\n\n4. **Regularly Update Dependencies**: Keep all dependencies up to date to ensure that any known vulnerabilities are patched.\n\n5. **Use Security Tools**: Employ container security tools to scan for vulnerabilities and misconfigurations.\n\n### Source Code Fix Recommendation\n\nTo address the writable root filesystem vulnerability, modify the Dockerfile or the command used to run the container to include the `--read-only` flag. Here is an example of how you might adjust the Docker run command:\n\n```bash\ndocker run --read-only -d goof-mongo\n```\n\n### Library Dependencies\n\nTo execute the 'goof-mongo' service properly, the following library dependencies are typically required:\n\n- `express`: A web framework for Node.js.\n- `mongoose`: An ODM (Object Data Modeling) library for MongoDB and Node.js.\n- `mongodb`: The official MongoDB driver for Node.js.\n- `body-parser`: Middleware to parse incoming request bodies.\n- `morgan`: HTTP request logger middleware for Node.js.\n\nEnsure these dependencies are listed in your `package.json` file and installed via npm:\n\n```json\n{\n  \"dependencies\": {\n    \"express\": \"^4.17.1\",\n    \"mongoose\": \"^5.10.9\",\n    \"mongodb\": \"^3.6.3\",\n    \"body-parser\": \"^1.19.0\",\n    \"morgan\": \"^1.10.0\"\n  }\n}\n```\n\n### Relevant OWASP Resources\n\n- [OWASP Docker Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html)\n- [OWASP Node.js Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-732: Incorrect Permission Assignment for Critical Resource](https://cwe.mitre.org/data/definitions/732.html)\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
+              },
+              "properties": {
+                "tags": [
+                  "yaml.docker-compose.security.writable-filesystem-service.writable-filesystem-service"
+                ]
+              }
+            },
+            {
+              "id": "glog-49bb19b6-8202-444d-b702-0993ced4a304",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe \"Privilege Escalation in 'goof-mongo' via setuid/setgid Binaries\" vulnerability arises when a containerized application, such as `goof-mongo`, runs with elevated privileges that can be exploited by an attacker to gain unauthorized access or escalate privileges within the system. This is particularly concerning when using setuid/setgid binaries, which can execute with the permissions of the file owner or group, potentially allowing an attacker to execute arbitrary code with elevated privileges.\n\nIn the context of the `goof-mongo` setup, the MongoDB container is exposed on port 27017, and if the container or its processes are running with elevated privileges, it could be exploited to gain unauthorized access to the host system or other sensitive resources.\n\n### General Mitigation Advice\n\n1. **Run Containers as Non-Root**: Ensure that containers do not run as the root user. Use a specific user with limited permissions to run the application within the container.\n\n2. **Minimize Capabilities**: Use Docker's capability dropping features to remove unnecessary capabilities from the container, reducing the potential attack surface.\n\n3. **Use Read-Only Filesystems**: Where possible, run containers with a read-only filesystem to prevent unauthorized modifications.\n\n4. **Limit Network Exposure**: Avoid exposing unnecessary ports and use network policies to restrict access to the container.\n\n5. **Regularly Update Images**: Keep the base images and dependencies up to date to ensure that known vulnerabilities are patched.\n\n### Source Code Fix Recommendation\n\nTo mitigate the specific vulnerability in the `goof-mongo` setup, modify the Docker Compose configuration to run the MongoDB container as a non-root user. Here is an example of how you might adjust the configuration:\n\n```yaml\ngoof-mongo:\n    container_name: goof-mongo\n    image: mongo:3\n    ports:\n      - \"27017:27017\"\n    user: \"1001:1001\"  # Use a non-root user\n    security_opt:\n      - no-new-privileges:true\n```\n\n### Library Dependencies\n\nFor the `goof-mongo` setup, the primary dependency is the MongoDB Docker image. Ensure that Docker and Docker Compose are installed on the host system to execute the configuration properly.\n\n### OWASP Resources\n\n- [OWASP Docker Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html)\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-269: Improper Privilege Management](https://cwe.mitre.org/data/definitions/269.html)\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.no-new-privileges"
+                ]
+              }
+            },
+            {
+              "id": "glog-b5ae572c-455a-4dbe-9676-78382455ecf6",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe \"Privilege Escalation in 'goof-mongo' via setuid/setgid Binaries\" vulnerability arises when a JavaScript application inadvertently allows users to execute binaries with elevated privileges. This can occur if the application spawns processes that inherit the setuid or setgid bits, allowing unauthorized privilege escalation. The vulnerability can be mitigated by using the `no-new-privileges:true` option, which prevents the creation of new privileges during process execution.\n\n### General Mitigation Advice\n\n1. **Use `no-new-privileges`**: Ensure that any spawned processes are executed with the `no-new-privileges:true` option to prevent privilege escalation.\n2. **Validate Inputs**: Always validate and sanitize inputs to prevent injection attacks that could lead to privilege escalation.\n3. **Least Privilege Principle**: Run applications with the least privileges necessary to perform their functions.\n4. **Regular Updates**: Keep all dependencies and the Node.js runtime updated to the latest versions to mitigate known vulnerabilities.\n5. **Security Audits**: Regularly perform security audits and code reviews to identify and fix potential vulnerabilities.\n\n### Source Code Fix Recommendation\n\nTo mitigate the specific vulnerability in the `goof-mongo` application, ensure that any child processes are spawned with the `no-new-privileges:true` option. Here is an example of how to implement this:\n\n```javascript\nconst { spawn } = require('child_process');\n\nconst options = {\n  stdio: 'inherit',\n  shell: true,\n  uid: process.getuid(),\n  gid: process.getgid(),\n  env: process.env,\n  detached: false,\n  // Mitigation: Prevent privilege escalation\n  noNewPrivileges: true\n};\n\nconst child = spawn('some-command', ['arg1', 'arg2'], options);\n\nchild.on('error', (err) => {\n  console.error('Failed to start child process:', err);\n});\n\nchild.on('exit', (code, signal) => {\n  console.log(`Child process exited with code ${code} and signal ${signal}`);\n});\n```\n\n### Library Dependencies\n\nTo execute the code example properly, the following Node.js standard library modules are required:\n\n- `child_process`: This module is used to spawn child processes.\n\n### OWASP Resources\n\n- [OWASP Node.js Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html)\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-269: Improper Privilege Management](https://cwe.mitre.org/data/definitions/269.html)\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
+              },
+              "properties": {
+                "tags": [
+                  "yaml.docker-compose.security.no-new-privileges.no-new-privileges"
+                ]
+              }
+            },
+            {
+              "id": "glog-4a2cc891-4b12-4503-97ac-fa8d85999524",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe \"Writable Root Filesystem Vulnerability in 'good-mysql' Service\" is a security issue that arises when the root filesystem of a containerized application is writable. This can lead to unauthorized modifications of the filesystem, potentially allowing attackers to inject malicious code, alter application behavior, or escalate privileges. In the context of a JavaScript application using the 'good-mysql' service, this vulnerability can be particularly dangerous if the application is running with elevated privileges or if sensitive data is stored on the filesystem.\n\n### General Mitigation Advice\n\n1. **Use Read-Only Filesystems**: Configure your container to use a read-only root filesystem. This can be done by setting the `readOnlyRootFilesystem` option to `true` in your container orchestration tool (e.g., Kubernetes).\n\n2. **Least Privilege Principle**: Ensure that the application runs with the least privileges necessary. Avoid running applications as the root user.\n\n3. **Environment Segregation**: Use separate environments for development, testing, and production. Ensure that production environments have stricter security controls.\n\n4. **Regular Updates and Patching**: Keep your dependencies and base images up to date to mitigate known vulnerabilities.\n\n5. **Filesystem Integrity Monitoring**: Implement monitoring to detect unauthorized changes to the filesystem.\n\n### Source Code Fix Recommendation\n\nTo address the writable root filesystem vulnerability, ensure that your container configuration specifies a read-only root filesystem. Here is an example of how you might configure this in a Kubernetes `Deployment`:\n\n```yaml\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: good-mysql\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      app: good-mysql\n  template:\n    metadata:\n      labels:\n        app: good-mysql\n    spec:\n      containers:\n      - name: good-mysql\n        image: your-image:latest\n        securityContext:\n          readOnlyRootFilesystem: true\n          runAsNonRoot: true\n          allowPrivilegeEscalation: false\n```\n\n### Library Dependencies\n\nTo execute the code example properly, ensure you have the following dependencies installed:\n\n- `mysql`: A MySQL client for Node.js.\n- `good`: A logging library for Node.js.\n- `good-console`: A console reporter for the `good` logging library.\n\nYou can install these dependencies using npm:\n\n```bash\nnpm install mysql good good-console\n```\n\n### Relevant OWASP Resources\n\n- [OWASP Node.js Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-732: Incorrect Permission Assignment for Critical Resource](https://cwe.mitre.org/data/definitions/732.html)\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
+              },
+              "properties": {
+                "tags": [
+                  "yaml.docker-compose.security.writable-filesystem-service.writable-filesystem-service"
+                ]
+              }
+            },
+            {
+              "id": "glog-eba32c71-7f1b-49cc-95ca-2a63cfaa37d9",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe \"Writable Root Filesystem Vulnerability in 'good-mysql' Service\" refers to a security issue where the root filesystem of a container is writable. This can lead to unauthorized modifications, privilege escalation, and potential data breaches. In the context of the `good-mysql` service, this vulnerability arises from using a writable root filesystem in the MySQL container, which can be exploited by attackers to alter the database or execute malicious code.\n\n### General Mitigation Advice\n\n1. **Use Read-Only Filesystem**: Configure the container to use a read-only filesystem to prevent unauthorized modifications.\n2. **Environment Variables**: Avoid using default or weak passwords in environment variables. Use secrets management tools to handle sensitive information.\n3. **Update Images**: Regularly update the base images to the latest versions to include security patches.\n4. **Least Privilege**: Run containers with the least privilege necessary, avoiding root user execution when possible.\n5. **Network Security**: Implement network policies to restrict access to the MySQL service.\n\n### Source Code Fix Recommendation\n\nTo mitigate the writable root filesystem vulnerability, modify the Docker Compose configuration to set the filesystem to read-only:\n\n```yaml\ngood-mysql:\n    container_name: goof-mysql\n    image: mysql:5\n    environment:\n      MYSQL_ROOT_PASSWORD: root\n      MYSQL_DATABASE: acme\n    ports:\n      - \"3306:3306\"\n    read_only: true\n```\n\n### Library Dependencies\n\nThe following dependencies are required to execute the code example properly:\n\n- Docker\n- Docker Compose\n\n### OWASP Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)\n- [CWE-732: Incorrect Permission Assignment for Critical Resource](https://cwe.mitre.org/data/definitions/732.html)"
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.writable-filesystem-service"
+                ]
+              }
+            },
+            {
+              "id": "glog-b58da75f-cdba-4b8d-b45f-79f480c814cb",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe \"Writable Root Filesystem Vulnerability in 'goof-mongo' Service\" refers to a security issue where the root filesystem of a Docker container is writable. This can lead to potential security risks, such as unauthorized modifications to the filesystem, privilege escalation, or persistence of malicious code. In the context of the `goof-mongo` service, this vulnerability arises from using a default MongoDB Docker image without setting the filesystem to read-only.\n\n### General Mitigation Advice\n\n1. **Use Read-Only Filesystem**: Configure the Docker container to use a read-only filesystem to prevent unauthorized modifications.\n2. **Least Privilege Principle**: Ensure that the container runs with the least privileges necessary to perform its functions.\n3. **Regular Updates**: Keep the MongoDB image and all dependencies up to date to mitigate known vulnerabilities.\n4. **Security Monitoring**: Implement monitoring and logging to detect any unauthorized access or modifications.\n\n### Source Code Fix Recommendation\n\nTo mitigate the writable root filesystem vulnerability, modify the Docker Compose configuration to set the filesystem to read-only:\n\n```yaml\ngoof-mongo:\n    container_name: goof-mongo\n    image: mongo:3\n    ports:\n      - \"27017:27017\"\n    read_only: true\n    volumes:\n      - /data/db\n```\n\n### Library Dependencies\n\nThe following dependencies are required to execute the code example properly:\n\n- Docker\n- Docker Compose\n\n### OWASP Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-732: Incorrect Permission Assignment for Critical Resource](https://cwe.mitre.org/data/definitions/732.html)\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.writable-filesystem-service"
+                ]
+              }
+            },
+            {
+              "id": "glog-9e016dc5-410f-465c-b00d-f0afdeceeb3c",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe \"Privilege Escalation via setuid/setgid Binaries in 'good-mysql' Service\" vulnerability occurs when a JavaScript application improperly handles setuid/setgid binaries, allowing an attacker to execute code with elevated privileges. This vulnerability is particularly concerning in environments where the application interacts with system-level binaries that have setuid or setgid permissions, potentially leading to unauthorized access or privilege escalation.\n\n### General Mitigation Advice\n\n1. **Avoid Using setuid/setgid Binaries**: Refrain from using setuid/setgid binaries in your application. If necessary, ensure they are executed in a controlled and secure manner.\n2. **Drop Privileges**: If elevated privileges are required, drop them as soon as they are no longer needed.\n3. **Validate Inputs**: Always validate and sanitize inputs to prevent injection attacks that could exploit setuid/setgid binaries.\n4. **Use Node.js Child Processes Securely**: When using child processes, ensure that the environment and inputs are tightly controlled.\n5. **Regularly Update Dependencies**: Keep all dependencies up to date to mitigate known vulnerabilities.\n\n### Source Code Fix Recommendation\n\nTo address this vulnerability, ensure that any interaction with setuid/setgid binaries is done securely. Here is a code snippet demonstrating a secure way to handle child processes:\n\n```javascript\nconst { execFile } = require('child_process');\n\n// Example of securely executing a binary\nfunction executeBinary(binaryPath, args, callback) {\n  // Validate the binary path and arguments\n  if (!isValidPath(binaryPath) || !areValidArgs(args)) {\n    return callback(new Error('Invalid binary path or arguments'));\n  }\n\n  // Execute the binary with controlled environment\n  execFile(binaryPath, args, { uid: process.getuid(), gid: process.getgid() }, (error, stdout, stderr) => {\n    if (error) {\n      return callback(error);\n    }\n    callback(null, stdout);\n  });\n}\n\n// Example validation functions\nfunction isValidPath(path) {\n  // Implement path validation logic\n  return true;\n}\n\nfunction areValidArgs(args) {\n  // Implement argument validation logic\n  return true;\n}\n```\n\n### Library Dependencies\n\nTo execute the code example properly, the following Node.js built-in module is required:\n\n- `child_process`: This module is used to spawn child processes.\n\n### OWASP Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [OWASP Node.js Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-269: Improper Privilege Management](https://cwe.mitre.org/data/definitions/269.html)\n- [CWE-732: Incorrect Permission Assignment for Critical Resource](https://cwe.mitre.org/data/definitions/732.html)"
+              },
+              "properties": {
+                "tags": [
+                  "yaml.docker-compose.security.no-new-privileges.no-new-privileges"
+                ]
+              }
+            },
+            {
+              "id": "glog-eb4e9b97-0f0e-4cb6-a5e6-609684eb9929",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe \"Sensitive Information Exposure Detected\" vulnerability in the JavaScript programming language, specifically in the `bl` module, is a type of Remote Memory Exposure. This vulnerability occurs when user input can manipulate the `consume()` function's argument to become negative, leading to a corruption of the BufferList state. This corruption can trick the system into exposing uninitialized memory through regular `.slice()` calls, potentially leaking sensitive information.\n\n### General Mitigation Advice\n\nTo mitigate this vulnerability, it is crucial to:\n\n1. **Validate User Input**: Ensure that any input that can affect buffer operations is properly validated and sanitized to prevent negative values or other unexpected inputs.\n2. **Upgrade Vulnerable Packages**: Regularly update dependencies to their latest versions to benefit from security patches and improvements.\n3. **Implement Security Best Practices**: Follow secure coding practices and conduct regular security audits to identify and address potential vulnerabilities.\n\n### Source Code Fix Recommendation\n\nTo address the specific vulnerability in the `bl` module, upgrade the `bl` package to a secure version. The recommended versions are 2.2.1, 3.0.1, 4.0.3, 1.2.3, or higher.\n\n### Library Dependencies\n\nThe code example provided requires the following library dependencies to execute properly:\n\n- `bl`: The BufferList library used to manage buffer operations.\n- `crypto`: A built-in Node.js module used to generate random bytes.\n\n### OWASP Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-200: Exposure of Sensitive Information to an Unauthorized Actor](https://cwe.mitre.org/data/definitions/200.html)"
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.detected-generic-secret"
+                ]
+              }
+            },
+            {
+              "id": "glog-9a34310b-0fdd-4239-a7f3-844ca7a93747",
+              "help": {
+                "text": "",
+                "markdown": "### JavaScript Template String XSS Vulnerability Detected\n\nThe vulnerability in question is a Remote Code Execution (RCE) vulnerability found in the `handlebars` package, which is an extension to the Mustache templating language. This vulnerability is triggered when certain compiling options are used to compile templates from untrusted sources. The vulnerability allows attackers to execute arbitrary code on the server, which can lead to severe security breaches.\n\n### General Mitigation Advice\n\n1. **Upgrade the `handlebars` package**: Ensure that you are using version 4.7.7 or higher, as this version contains the necessary patches to mitigate the vulnerability.\n2. **Avoid compiling templates from untrusted sources**: Always validate and sanitize input data before processing it with Handlebars or any other templating engine.\n3. **Use security linters and tools**: Implement security linters and tools in your development pipeline to catch potential vulnerabilities early.\n4. **Regularly update dependencies**: Keep all your project dependencies up to date to benefit from the latest security patches.\n\n### Source Code Fix Recommendation\n\nTo mitigate this specific vulnerability, upgrade the `handlebars` package to version 4.7.7 or higher. This can be done by updating your `package.json` file and running the appropriate package manager command:\n\n```json\n{\n  \"dependencies\": {\n    \"handlebars\": \"^4.7.7\"\n  }\n}\n```\n\nRun the following command to update the package:\n\n```bash\nnpm install handlebars@^4.7.7\n```\n\n### Library Dependencies\n\nThe code example provided requires the following library dependencies to execute properly:\n\n- `handlebars`: The main library used for compiling and executing the template.\n\n### References\n\n- [GitHub Commit](https://github.com/handlebars-lang/handlebars.js/commit/b6d3de7123eebba603e321f04afdbae608e8fea8)\n\n### OWASP Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [OWASP XSS Prevention Cheat Sheet](https://owasp.org/www-community/attacks/xss/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-94: Improper Control of Generation of Code ('Code Injection')](https://cwe.mitre.org/data/definitions/94.html)"
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.no-interpolation-js-template-string"
+                ]
+              }
+            },
+            {
+              "id": "glog-be3d73d9-0797-4fdd-8a37-da18f9607331",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe \"Privilege escalation vulnerability in 'good-mysql' service\" refers to a security flaw where an attacker can gain elevated privileges within the MySQL service container. This vulnerability is often due to misconfigurations or insecure default settings, such as using a weak or default root password, which can be exploited to gain unauthorized access to the database with administrative privileges.\n\n### General Mitigation Advice\n\n1. **Use Strong Passwords**: Avoid using default or weak passwords for the MySQL root user. Use a strong, unique password.\n2. **Limit Network Exposure**: Configure the MySQL service to listen only on localhost or within a private network to prevent unauthorized access from external sources.\n3. **Least Privilege Principle**: Create specific database users with only the necessary privileges required for their tasks, rather than using the root user for all operations.\n4. **Regular Updates**: Keep the MySQL image and all related software up to date with the latest security patches.\n5. **Environment Variables**: Avoid hardcoding sensitive information like passwords in environment variables. Use secrets management tools to handle sensitive data securely.\n\n### Source Code Fix Recommendation\n\nTo mitigate the privilege escalation vulnerability, update the `docker-compose.yml` configuration as follows:\n\n```yaml\ngood-mysql:\n    container_name: goof-mysql\n    image: mysql:5\n    environment:\n      MYSQL_ROOT_PASSWORD: <strong-unique-password>\n      MYSQL_DATABASE: acme\n    ports:\n      - \"127.0.0.1:3306:3306\"\n```\n\n- Replace `<strong-unique-password>` with a strong, unique password.\n- Bind the MySQL service to `127.0.0.1` to restrict access to localhost.\n\n### Library Dependencies\n\nThe following libraries are required to execute the code example properly:\n\n- Docker\n- Docker Compose\n\n### OWASP Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-269: Improper Privilege Management](https://cwe.mitre.org/data/definitions/269.html)\n- [CWE-798: Use of Hard-coded Credentials](https://cwe.mitre.org/data/definitions/798.html)"
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.no-new-privileges"
+                ]
+              }
+            }
+          ],
+          "language": "en-US",
+          "contents": [
+            "localizedData",
+            "nonLocalizedData"
+          ],
+          "isComprehensive": false
+        }
+      },
+      "language": "en-US",
+      "results": [
+        {
+          "ruleId": "glog-7127fa4a-5d1a-46f9-9cdc-85cb29abef99",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Code Injection Vulnerability in GitHub Actions Using Untrusted `github` Context Data"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".github/glog-action/action.yml",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 45,
+                  "startColumn": 7,
+                  "endLine": 56,
+                  "endColumn": 19,
+                  "snippet": {
+                    "text": "      run: |\n        TOOL_CMD=\"${{ github.action_path }}/glog.sh scan --path $GITHUB_WORKSPACE\"\n        if [ ! -z \"${{ inputs.lang }}\" ]; then\n          TOOL_CMD+=\" --lang ${{ inputs.lang }}\"\n        fi\n        if [ ! -z \"${{ inputs.ignore }}\" ]; then\n          TOOL_CMD+=\" --ignore ${{ inputs.ignore }}\"\n        fi\n        if [ ! -z \"${{ inputs.client }}\" ]; then\n          TOOL_CMD+=\" --client ${{ inputs.client }}\"\n        fi\n        $TOOL_CMD"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-de6a7643-3523-41f7-9f53-84cb382a37f5",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Container Privilege Escalation Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Dockerfile",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 13,
+                  "startColumn": 1,
+                  "endLine": 13,
+                  "endColumn": 28,
+                  "snippet": {
+                    "text": "ENTRYPOINT [\"npm\", \"start\"]"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-c4fc7c02-5ad7-4bdc-84f6-7125e20e1df2",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Sensitive Information Exposure"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 83,
+                  "startColumn": 14,
+                  "endLine": 83,
+                  "endColumn": 67,
+                  "snippet": {
+                    "text": "var token = 'SECRET_TOKEN_f8ed84e8f41e4146403dd4a6bbcea5e418d23a9';"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-1c7c338d-78ae-4447-b455-3e3eef8311b5",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Code Injection Vulnerability in GitHub Actions Using Untrusted `github` Context Data"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".github/glog-action/action.yml",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 41,
+                  "startColumn": 7,
+                  "endLine": 41,
+                  "endColumn": 108,
+                  "snippet": {
+                    "text": "      run: echo \"${{ inputs.github-token }}\" | docker login ghcr.io -u ${{ github.actor }} --password-stdin"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-cefa7ecb-4112-4ad3-ae27-c58cb2fe81a9",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Dockerfile USER Misconfiguration Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Dockerfile",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 13,
+                  "startColumn": 1,
+                  "endLine": 13,
+                  "endColumn": 28,
+                  "snippet": {
+                    "text": "ENTRYPOINT [\"npm\", \"start\"]"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-f4389141-97e4-4faf-80b5-503dcd6ced23",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Writable Root Filesystem Vulnerability in 'goof-mongo' Service"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker-compose.yml",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 15,
+                  "startColumn": 3,
+                  "endLine": 15,
+                  "endColumn": 13,
+                  "snippet": {
+                    "text": "  goof-mongo:"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-49bb19b6-8202-444d-b702-0993ced4a304",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Privilege Escalation in 'goof-mongo' via setuid/setgid Binaries"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker-compose.yml",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 15,
+                  "startColumn": 3,
+                  "endLine": 19,
+                  "endColumn": 22,
+                  "snippet": {
+                    "text": "  goof-mongo:\n    container_name: goof-mongo\n    image: mongo:3\n    ports:\n      - \"27017:27017\""
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-b5ae572c-455a-4dbe-9676-78382455ecf6",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Privilege Escalation in 'goof-mongo' via setuid/setgid Binaries; Mitigate with 'no-new-privileges:true'."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker-compose.yml",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 15,
+                  "startColumn": 3,
+                  "endLine": 15,
+                  "endColumn": 13,
+                  "snippet": {
+                    "text": "  goof-mongo:"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-4a2cc891-4b12-4503-97ac-fa8d85999524",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Writable Root Filesystem Vulnerability in 'good-mysql' Service"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker-compose.yml",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 20,
+                  "startColumn": 3,
+                  "endLine": 20,
+                  "endColumn": 13,
+                  "snippet": {
+                    "text": "  good-mysql:"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-eba32c71-7f1b-49cc-95ca-2a63cfaa37d9",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Writable Root Filesystem Vulnerability in 'good-mysql' Service"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker-compose.yml",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 20,
+                  "startColumn": 3,
+                  "endLine": 27,
+                  "endColumn": 20,
+                  "snippet": {
+                    "text": "  good-mysql:\n    container_name: goof-mysql\n    image: mysql:5\n    environment:\n      MYSQL_ROOT_PASSWORD: root\n      MYSQL_DATABASE: acme\n    ports:\n      - \"3306:3306\""
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-b58da75f-cdba-4b8d-b45f-79f480c814cb",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Writable Root Filesystem Vulnerability in 'goof-mongo' Service"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker-compose.yml",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 15,
+                  "startColumn": 3,
+                  "endLine": 19,
+                  "endColumn": 22,
+                  "snippet": {
+                    "text": "  goof-mongo:\n    container_name: goof-mongo\n    image: mongo:3\n    ports:\n      - \"27017:27017\""
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-9e016dc5-410f-465c-b00d-f0afdeceeb3c",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Privilege Escalation via setuid/setgid Binaries in 'good-mysql' Service"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker-compose.yml",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 20,
+                  "startColumn": 3,
+                  "endLine": 20,
+                  "endColumn": 13,
+                  "snippet": {
+                    "text": "  good-mysql:"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-eb4e9b97-0f0e-4cb6-a5e6-609684eb9929",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Sensitive Information Exposure Detected"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "example111.json",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 80,
+                  "startColumn": 717,
+                  "endLine": 80,
+                  "endColumn": 1529,
+                  "snippet": {
+                    "text": "                \"markdown\": \"* Package Manager: npm\\n* Vulnerable module: bl\\n* Introduced through: goof@1.0.1, mongodb@3.5.9 and others\\n### Detailed paths\\n* _Introduced through_: goof@1.0.1 › mongodb@3.5.9 › bl@2.2.0\\n# Overview\\n[bl](https://github.com/rvagg/bl) is a library that allows you to collect buffers and access with a standard readable buffer interface.\\n\\nAffected versions of this package are vulnerable to Remote Memory Exposure. If user input ends up in `consume()` argument and can become negative, BufferList state can be corrupted, tricking it into exposing uninitialized memory via regular `.slice()` calls.\\r\\n\\r\\n## PoC by chalker\\r\\n```\\r\\nconst { BufferList } = require('bl')\\r\\nconst secret = require('crypto').randomBytes(256)\\r\\nfor (let i = 0; i < 1e6; i++) {\\r\\n  const clone = Buffer.from(secret)\\r\\n  const bl = new BufferList()\\r\\n  bl.append(Buffer.from('a'))\\r\\n  bl.consume(-1024)\\r\\n  const buf = bl.slice(1)\\r\\n  if (buf.indexOf(clone) !== -1) {\\r\\n    console.error(`Match (at ${i})`, buf)\\r\\n  }\\r\\n}\\r\\n```\\n# Remediation\\nUpgrade `bl` to version 2.2.1, 3.0.1, 4.0.3, 1.2.3 or higher.\\n# References\\n- [Github Commit](https://github.com/rvagg/bl/commit/8a8c13c880e2bef519133ea43e0e9b78b5d0c91e)\\n- [Github Commit](https://github.com/rvagg/bl/commit/d3e240e3b8ba4048d3c76ef5fb9dd1f8872d3190)\\n- [Github Commit](https://github.com/rvagg/bl/commit/dacc4ac7d5fcd6201bcf26fbd886951be9537466)\\n- [GitHub Commit](https://github.com/rvagg/bl/commit/0bd87ec97be399b129fc62feff2943ffa21bcc00)\\n- [HackerOne Report](https://hackerone.com/reports/966347)\\n\""
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-9a34310b-0fdd-4239-a7f3-844ca7a93747",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "JavaScript Template String XSS Vulnerability Detected"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "example111.json",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 260,
+                  "startColumn": 746,
+                  "endLine": 260,
+                  "endColumn": 1368,
+                  "snippet": {
+                    "text": "                \"markdown\": \"* Package Manager: npm\\n* Vulnerable module: handlebars\\n* Introduced through: goof@1.0.1, tap@11.1.5 and others\\n### Detailed paths\\n* _Introduced through_: goof@1.0.1 › tap@11.1.5 › nyc@11.9.0 › istanbul-reports@1.4.0 › handlebars@4.0.11\\n# Overview\\n[handlebars](https://www.npmjs.com/package/handlebars) is an extension to the Mustache templating language.\\n\\nAffected versions of this package are vulnerable to Remote Code Execution (RCE) when selecting certain compiling options to compile templates coming from an untrusted source.\\r\\n\\r\\n## POC\\r\\n```\\r\\n<script src=\\\"https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js\\\"></script> \\r\\n<script> \\r\\n// compile the template \\r\\nvar s = ` \\r\\n{{#with (__lookupGetter__ \\\"__proto__\\\")}} \\r\\n{{#with (./constructor.getOwnPropertyDescriptor . \\\"valueOf\\\")}} \\r\\n{{#with ../constructor.prototype}} \\r\\n{{../../constructor.defineProperty . \\\"hasOwnProperty\\\" ..}} \\r\\n{{/with}} \\r\\n{{/with}} \\r\\n{{/with}} \\r\\n{{#with \\\"constructor\\\"}} \\r\\n{{#with split}} \\r\\n{{pop (push \\\"alert('Vulnerable Handlebars JS when compiling in strict mode');\\\")}} \\r\\n{{#with .}} \\r\\n{{#with (concat (lookup join (slice 0 1)))}} \\r\\n{{#each (slice 2 3)}} \\r\\n{{#with (apply 0 ../..)}} \\r\\n{{.}} \\r\\n{{/with}} \\r\\n{{/each}} \\r\\n{{/with}} \\r\\n{{/with}} \\r\\n{{/with}} \\r\\n{{/with}} \\r\\n`;\\r\\nvar template = Handlebars.compile(s, { \\r\\nstrict: true \\r\\n}); \\r\\n// execute the compiled template and print the output to the console console.log(template({})); \\r\\n</script>\\r\\n```\\n# Remediation\\nUpgrade `handlebars` to version 4.7.7 or higher.\\n# References\\n- [GitHub Commit](https://github.com/handlebars-lang/handlebars.js/commit/b6d3de7123eebba603e321f04afdbae608e8fea8)\\n\""
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-be3d73d9-0797-4fdd-8a37-da18f9607331",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Privilege escalation vulnerability in 'good-mysql' service."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker-compose.yml",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 20,
+                  "startColumn": 3,
+                  "endLine": 27,
+                  "endColumn": 20,
+                  "snippet": {
+                    "text": "  good-mysql:\n    container_name: goof-mysql\n    image: mysql:5\n    environment:\n      MYSQL_ROOT_PASSWORD: root\n      MYSQL_DATABASE: acme\n    ports:\n      - \"3306:3306\""
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "properties": {}
+        }
+      ],
+      "newlineSequences": [
+        "\r\n",
+        "\n"
+      ]
+    }
+  ]
+}
