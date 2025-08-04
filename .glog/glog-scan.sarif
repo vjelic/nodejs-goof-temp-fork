@@ -12,54 +12,7 @@
           "informationUri": "https://www.glog.ai",
           "rules": [
             {
-              "id": "glog-ecbdd1d9-c7ad-4aa2-9cda-3e59a3829166",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nThe \"Detected Generic Secret Vulnerability\" in JavaScript refers to a Remote Memory Exposure vulnerability in the `bl` (BufferList) library. This vulnerability can lead to the corruption of BufferList state if user input ends up in the `consume()` argument and can become negative. This can trick the BufferList into exposing uninitialized memory via regular `.slice()` calls.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to sanitize and validate all user inputs. Avoid using user input directly in methods like `consume()`. \n\n## Source Code Fix Recommendation\n\nThe recommended fix for this specific vulnerability is to upgrade the `bl` library to version 2.2.1, 3.0.1, 4.0.3, 1.2.3 or higher.\n\n## Library Dependencies\n\nThe code example requires the following library dependencies to execute properly:\n\n- `bl`\n- `crypto`\n\n## References\n\n- [OWASP Top 10 - A3:2017-Sensitive Data Exposure](https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure)\n- [CWE-200: Information Exposure](https://cwe.mitre.org/data/definitions/200.html)\n\nPlease note that the above links are valid and active for anonymous users at the time of writing this report."
-              },
-              "properties": {
-                "tags": [
-                  "resources.rules.detected-generic-secret"
-                ]
-              }
-            },
-            {
-              "id": "glog-ee732219-2f2f-4df9-adff-6ae9379ff8d0",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nThe vulnerability described here is a potential Cross-Site Scripting (XSS) vulnerability detected in JavaScript template string interpolation. This vulnerability is found in the `handlebars` module, which is an extension to the Mustache templating language. The affected versions of this package are vulnerable to Remote Code Execution (RCE) when selecting certain compiling options to compile templates coming from an untrusted source.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to upgrade the `handlebars` module to version 4.7.7 or higher. This version contains a fix for the vulnerability. \n\n## Source Code Fix Recommendation\n\nThe source code fix for this vulnerability is to upgrade the `handlebars` module to version 4.7.7 or higher. This can be done by updating the version number in your `package.json` file and running `npm install`.\n\n```json\n\"dependencies\": {\n  \"handlebars\": \"^4.7.7\"\n}\n```\n\nThen run:\n\n```bash\nnpm install\n```\n\n## Library Dependencies\n\nThe code example provided requires the following library dependencies to execute properly:\n\n- `handlebars`\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)\n- [GitHub Commit](https://github.com/handlebars-lang/handlebars.js/commit/b6d3de7123eebba603e321f04afdbae608e8fea8)"
-              },
-              "properties": {
-                "tags": [
-                  "resources.rules.no-interpolation-js-template-string"
-                ]
-              }
-            },
-            {
-              "id": "glog-2d0cc22d-c3c3-4a0d-ad45-dff78aba47f7",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\n\"Detected Generic Secret Vulnerability\" is a common security issue in JavaScript programming where sensitive information such as API keys, passwords, or tokens are hard-coded into the source code. This is a bad practice as it exposes these secrets to anyone who has access to the code, making it easier for malicious actors to exploit the system.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, avoid hard-coding secrets into your source code. Instead, use environment variables or secure secret management systems to store and access these secrets. This way, the secrets are not exposed in the code and can be managed securely and separately from the codebase.\n\n## Source Code Fix Recommendation\n\nInstead of hard-coding the token into the code, you can use an environment variable to store the token. Here's how you can do it:\n\n```javascript\nvar token = process.env.SECRET_TOKEN;\n```\n\nThen, you can set the `SECRET_TOKEN` environment variable in your server environment. The method to do this varies depending on your operating system and server setup.\n\n## Library Dependencies\n\nThe code example does not require any library dependencies to execute properly.\n\n## OWASP Resources\n\n- [OWASP Top 10 2017: A2-Broken Authentication](https://owasp.org/www-project-top-ten/2017/A2_2017-Broken_Authentication)\n- [OWASP Cheat Sheet: Secrets Management](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-798: Use of Hard-coded Credentials](https://cwe.mitre.org/data/definitions/798.html)"
-              },
-              "properties": {
-                "tags": [
-                  "resources.rules.detected-generic-secret"
-                ]
-              }
-            },
-            {
-              "id": "glog-69f27e9d-e3a1-45fa-8483-3c6edbfc4409",
-              "help": {
-                "text": ""
-              },
-              "properties": {
-                "tags": [
-                  "resources.rules.dom-xss-finder"
-                ]
-              }
-            },
-            {
-              "id": "glog-dd315579-463d-47fe-83b8-b368cbfb306a",
+              "id": "glog-d6080067-d323-47c4-a08b-43bdf5cbd051",
               "help": {
                 "text": "",
                 "markdown": "## Description\n\nPotential Root User Exploitation in Docker Container Programs is a security vulnerability that arises when Docker containers are run as root users. This is a common default setting in many Docker configurations. If an attacker manages to break out of the container, they could gain root access to the host system, leading to a serious security breach.\n\nIn the context of JavaScript and Node.js applications, this vulnerability can be exploited if the application is run with root privileges inside a Docker container. The specific vulnerability sink in this case is the ENTRYPOINT directive in the Dockerfile, which starts the application using npm.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to run Docker containers as a non-root user. This can be achieved by creating a new user in the Dockerfile and switching to this user before the application is started.\n\n## Source Code Fix Recommendation\n\nHere is a recommended fix for the Dockerfile:\n\n```Dockerfile\nFROM node:14\nWORKDIR /usr/src/app\nCOPY package*.json ./\nRUN npm install\nCOPY . .\nRUN adduser -D nonrootuser\nUSER nonrootuser\nENTRYPOINT [\"npm\", \"start\"]\n```\n\nIn this Dockerfile, a new user `nonrootuser` is created and the USER directive is used to switch to this user before the application is started.\n\n## Library Dependencies\n\nThe code example does not specify any library dependencies. However, a typical Node.js application would require the `npm` package manager and any dependencies listed in the `package.json` file.\n\n## References\n\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
@@ -71,19 +24,43 @@
               }
             },
             {
-              "id": "glog-53b66c35-6900-4834-89e2-0b9d88f5b8ca",
+              "id": "glog-bd1bb94d-0719-47ff-a858-3612a7f7ad43",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nThe `Math.random()` function in JavaScript is not suitable for cryptographic purposes. It generates pseudo-random numbers using a seed that can be easily predicted, making it vulnerable to attacks. This vulnerability is known as \"Cryptographic Weakness in crypto.pseudoRandomBytes()/Math.random() Random Number Generator\".\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, use a cryptographically secure pseudo-random number generator (CSPRNG) instead of `Math.random()`. In Node.js, you can use the `crypto.randomBytes()` function, which generates cryptographically strong pseudo-random data.\n\n## Source Code Fix Recommendation\n\nHere is a fixed version of the code:\n\n```javascript\nconst crypto = require('crypto');\n\nlet user = {\n  name: 'admin',\n  password: crypto.randomBytes(16).toString('hex'),\n  canDelete: true\n};\n```\n\nThis code uses the `crypto.randomBytes()` function to generate a 16-byte random value for the password, which is then converted to a hexadecimal string.\n\n## Library Dependencies\n\nThe fixed code requires the built-in `crypto` module in Node.js.\n\n## References\n\n- [CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)](https://cwe.mitre.org/data/definitions/338.html)"
+                "markdown": "## Description\n\nThe vulnerability described here is a potential Cross-Site Scripting (XSS) vulnerability detected in JavaScript template string interpolation. This vulnerability is found in the `handlebars` module, which is an extension to the Mustache templating language. The affected versions of this package are vulnerable to Remote Code Execution (RCE) when selecting certain compiling options to compile templates coming from an untrusted source.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to upgrade the `handlebars` module to version 4.7.7 or higher. This version contains a fix for the vulnerability. \n\n## Source Code Fix Recommendation\n\nThe source code fix for this vulnerability is to upgrade the `handlebars` module to version 4.7.7 or higher. This can be done by updating the version number in your `package.json` file and running `npm install`.\n\n```json\n\"dependencies\": {\n  \"handlebars\": \"^4.7.7\"\n}\n```\n\nThen run:\n\n```bash\nnpm install\n```\n\n## Library Dependencies\n\nThe code example provided requires the following library dependencies to execute properly:\n\n- `handlebars`\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)\n- [GitHub Commit](https://github.com/handlebars-lang/handlebars.js/commit/b6d3de7123eebba603e321f04afdbae608e8fea8)"
               },
               "properties": {
                 "tags": [
-                  "resources.rules.node_insecure_random_generator"
+                  "resources.rules.no-interpolation-js-template-string"
                 ]
               }
             },
             {
-              "id": "glog-14e927c3-a8f0-4f31-8196-2fa213117201",
+              "id": "glog-9d72e817-253e-424a-af54-1bbaa19dfad6",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\n\"Detected Generic Secret Vulnerability\" is a common security issue in JavaScript programming where sensitive information such as API keys, passwords, or tokens are hard-coded into the source code. This is a bad practice as it exposes these secrets to anyone who has access to the code, making it easier for malicious actors to exploit the system.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, avoid hard-coding secrets into your source code. Instead, use environment variables or secure secret management systems to store and access these secrets. This way, the secrets are not exposed in the code and can be managed securely and separately from the codebase.\n\n## Source Code Fix Recommendation\n\nInstead of hard-coding the token into the code, you can use an environment variable to store the token. Here's how you can do it:\n\n```javascript\nvar token = process.env.SECRET_TOKEN;\n```\n\nThen, you can set the `SECRET_TOKEN` environment variable in your server environment. The method to do this varies depending on your operating system and server setup.\n\n## Library Dependencies\n\nThe code example does not require any library dependencies to execute properly.\n\n## OWASP Resources\n\n- [OWASP Top 10 2017: A2-Broken Authentication](https://owasp.org/www-project-top-ten/2017/A2_2017-Broken_Authentication)\n- [OWASP Cheat Sheet: Secrets Management](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-798: Use of Hard-coded Credentials](https://cwe.mitre.org/data/definitions/798.html)"
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.detected-generic-secret"
+                ]
+              }
+            },
+            {
+              "id": "glog-ccf4e1d3-83a8-41d2-83e9-47f0b7aa6fce",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe \"Detected Generic Secret Vulnerability\" in JavaScript refers to a Remote Memory Exposure vulnerability in the `bl` (BufferList) library. This vulnerability can lead to the corruption of BufferList state if user input ends up in the `consume()` argument and can become negative. This can trick the BufferList into exposing uninitialized memory via regular `.slice()` calls.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to sanitize and validate all user inputs. Avoid using user input directly in methods like `consume()`. \n\n## Source Code Fix Recommendation\n\nThe recommended fix for this specific vulnerability is to upgrade the `bl` library to version 2.2.1, 3.0.1, 4.0.3, 1.2.3 or higher.\n\n## Library Dependencies\n\nThe code example requires the following library dependencies to execute properly:\n\n- `bl`\n- `crypto`\n\n## References\n\n- [OWASP Top 10 - A3:2017-Sensitive Data Exposure](https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure)\n- [CWE-200: Information Exposure](https://cwe.mitre.org/data/definitions/200.html)\n\nPlease note that the above links are valid and active for anonymous users at the time of writing this report."
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.detected-generic-secret"
+                ]
+              }
+            },
+            {
+              "id": "glog-bb1063e3-981e-4ca2-afa0-1d1e9cb987e8",
               "help": {
                 "text": ""
               },
@@ -94,19 +71,7 @@
               }
             },
             {
-              "id": "glog-df1ff019-8e3f-42b7-97a2-6a26d9a250a7",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided code snippet, the application is logging the username directly to the console without any sanitization or encoding. If the username is user-controlled and can contain arbitrary characters, this could potentially lead to a Cross-Site Scripting (XSS) vulnerability if the console output is rendered in an HTML context.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always escape untrusted data based on the HTML context (body, attribute, JavaScript, CSS, or URL) that the data will be placed into. In this case, since the data is being output to the console and not directly into an HTML context, the risk is low. However, it's still a good practice to sanitize and validate all user-controlled data to prevent potential security issues.\n\n## Source Code Fix Recommendation\n\nIn this case, you could use a library like DOMPurify to sanitize the username before logging it to the console:\n\n```javascript\nimport DOMPurify from 'dompurify';\n\nconsole.log(`User logged in: ${DOMPurify.sanitize(username)}`);\n```\n\n## Library Dependencies\n\nThe code example requires the following library:\n\n- DOMPurify\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
-              },
-              "properties": {
-                "tags": [
-                  "resources.rules.raw-html-concat"
-                ]
-              }
-            },
-            {
-              "id": "glog-a5f28741-a404-4074-ad7c-3ef2aab8fc0c",
+              "id": "glog-66181aaa-a767-45cc-b3cb-1cf19d2f69af",
               "help": {
                 "text": "",
                 "markdown": "## Description\n\nThe \"JavaScript Sink Vulnerability Detected through User-Input Controlled Parameter Passing\" vulnerability refers to a situation where an attacker can control the input parameters passed to a function or method in JavaScript. This can lead to various types of attacks, such as Cross-Site Scripting (XSS), SQL Injection, or Command Injection, depending on the context and usage of the controlled parameter.\n\nIn the provided code snippet, the vulnerability lies in the fact that the content of a `todo` object is directly converted to a string and sent as a response without any form of sanitization or encoding. If the `todo.content` is user-controlled, it can lead to various types of attacks.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always sanitize and validate user inputs. Never trust user inputs blindly. Use appropriate encoding when converting user inputs to strings. If possible, use prepared statements or parameterized queries to prevent SQL Injection attacks.\n\n## Source Code Fix Recommendation\n\n```javascript\nvar sanitizeHtml = require('sanitize-html');\n\n// ...\n\nvar sanitizedContent = sanitizeHtml(todo.content);\nres.status(302).send(sanitizedContent.toString('base64'));\n```\n\nIn this fixed code, the `sanitize-html` library is used to sanitize the `todo.content` before converting it to a string and sending it as a response. This prevents any malicious scripts from being executed.\n\n## Library Dependencies\n\n- Express.js\n- sanitize-html\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP SQL Injection Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)\n- [CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')](https://cwe.mitre.org/data/definitions/89.html)"
@@ -118,40 +83,31 @@
               }
             },
             {
-              "id": "glog-99650436-ac42-485d-930b-29d26f6ac4bc",
+              "id": "glog-ad5257fe-24fc-4258-a47a-d77eadeca499",
               "help": {
-                "text": ""
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided code snippet, the application is logging the username directly to the console without any sanitization or encoding. If the username is user-controlled and can contain arbitrary characters, this could potentially lead to a Cross-Site Scripting (XSS) vulnerability if the console output is rendered in an HTML context.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always escape untrusted data based on the HTML context (body, attribute, JavaScript, CSS, or URL) that the data will be placed into. In this case, since the data is being output to the console and not directly into an HTML context, the risk is low. However, it's still a good practice to sanitize and validate all user-controlled data to prevent potential security issues.\n\n## Source Code Fix Recommendation\n\nIn this case, you could use a library like DOMPurify to sanitize the username before logging it to the console:\n\n```javascript\nimport DOMPurify from 'dompurify';\n\nconsole.log(`User logged in: ${DOMPurify.sanitize(username)}`);\n```\n\n## Library Dependencies\n\nThe code example requires the following library:\n\n- DOMPurify\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
               },
               "properties": {
                 "tags": [
-                  "resources.rules.direct-response-write"
+                  "resources.rules.raw-html-concat"
                 ]
               }
             },
             {
-              "id": "glog-f8cf691a-64a5-4852-b60c-de14e10ed926",
+              "id": "glog-cf1be48b-8b7e-4ca4-957a-9147b5fcc7bf",
               "help": {
-                "text": ""
+                "text": "",
+                "markdown": "## Description\n\nThe `Math.random()` function in JavaScript is not suitable for cryptographic purposes. It generates pseudo-random numbers using a seed that can be easily predicted, making it vulnerable to attacks. This vulnerability is known as \"Cryptographic Weakness in crypto.pseudoRandomBytes()/Math.random() Random Number Generator\".\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, use a cryptographically secure pseudo-random number generator (CSPRNG) instead of `Math.random()`. In Node.js, you can use the `crypto.randomBytes()` function, which generates cryptographically strong pseudo-random data.\n\n## Source Code Fix Recommendation\n\nHere is a fixed version of the code:\n\n```javascript\nconst crypto = require('crypto');\n\nlet user = {\n  name: 'admin',\n  password: crypto.randomBytes(16).toString('hex'),\n  canDelete: true\n};\n```\n\nThis code uses the `crypto.randomBytes()` function to generate a 16-byte random value for the password, which is then converted to a hexadecimal string.\n\n## Library Dependencies\n\nThe fixed code requires the built-in `crypto` module in Node.js.\n\n## References\n\n- [CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)](https://cwe.mitre.org/data/definitions/338.html)"
               },
               "properties": {
                 "tags": [
-                  "resources.rules.direct-response-write"
+                  "resources.rules.node_insecure_random_generator"
                 ]
               }
             },
             {
-              "id": "glog-ea109702-f8db-4ae9-9e4a-623c31899f3e",
-              "help": {
-                "text": ""
-              },
-              "properties": {
-                "tags": [
-                  "resources.rules.dom-xss-finder"
-                ]
-              }
-            },
-            {
-              "id": "glog-f42a8451-50fd-49b5-9103-14fc259f1b50",
+              "id": "glog-7f108c6f-a396-4c5b-99af-533713d11a5a",
               "help": {
                 "text": "",
                 "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when data enters a web application through an untrusted source, most frequently a web request, and is used to generate dynamic HTML content. The vulnerability is present when the application does not adequately validate input before returning it to the client's browser. In JavaScript, direct writing to the response object can lead to XSS vulnerabilities if the data written to the response is not properly sanitized.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always sanitize user input before using it to generate dynamic content. This can be done by using a library that provides functions for escaping special characters in strings that are to be included in HTML or JavaScript output.\n\n## Source Code Fix Recommendation\n\n```javascript\nvar express = require('express');\nvar app = express();\nvar sanitizer = require('sanitizer');\n\napp.get('/', function(req, res){\n  var messages = req.query.messages;\n  messages = sanitizer.sanitize(messages);\n  res.send(messages);\n});\n```\n\nIn this example, the `sanitizer` library is used to sanitize the `messages` variable before it is sent in the response. This prevents any potentially malicious scripts from being executed in the client's browser.\n\n## Library Dependencies\n\n- express\n- sanitizer\n\n## References\n\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
@@ -163,31 +119,51 @@
               }
             },
             {
-              "id": "glog-f0a601c5-db4a-4676-9469-d0ebc199926c",
+              "id": "glog-897c4bf0-7272-4a76-ac51-4cc817291471",
               "help": {
-                "text": "",
-                "markdown": "## Description\n\nThe EJS Template XSS Vulnerability is a type of Cross-Site Scripting (XSS) vulnerability that occurs when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. This vulnerability can allow attackers to execute malicious scripts in the victim's browser which can lead to a variety of attacks such as stealing user sessions, defacing web sites, or redirecting the user to malicious sites.\n\nIn the provided code snippet, the vulnerability arises from the use of unescaped external data (`todo.content`) in the EJS template. This can potentially allow an attacker to inject malicious scripts through the `todo.content` field.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always escape untrusted data based on the HTML context (body, attribute, JavaScript, CSS, or URL) that the data will be placed into. In EJS, the `<%- %>` tags are used to output unescaped data into the template, which can lead to XSS vulnerabilities. Instead, use `<%= %>` tags to output escaped data.\n\n## Source Code Fix Recommendation\n\nHere is the recommended fix for the provided code snippet:\n\n```html\n<a class=\"update-link\" href=\"/edit/<%= todo._id %>\" title=\"Update this todo item\"><%= marked(todo.content) %></a>\n```\n\nIn this fix, the `<%- %>` tags are replaced with `<%= %>` tags to ensure that the `todo.content` data is properly escaped.\n\n## Library Dependencies\n\nThe provided code snippet requires the following library dependencies:\n\n- Express.js: A web application framework for Node.js.\n- EJS: A templating engine for generating HTML markup with plain JavaScript.\n- Marked: A markdown parser and compiler built for speed.\n\n## References\n\n- [OWASP Cross-Site Scripting (XSS)](https://owasp.org/www-community/attacks/xss/)\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)\n\nPlease note that all the links are active and accessible for anonymous users."
+                "text": ""
               },
               "properties": {
                 "tags": [
-                  "javascript.express.security.audit.xss.ejs.explicit-unescape.template-explicit-unescape"
+                  "resources.rules.direct-response-write"
                 ]
               }
             },
             {
-              "id": "glog-5acf3242-8800-46a6-88c0-44885529e060",
+              "id": "glog-ef82e215-576f-4709-9e2b-b84bd5eba4cd",
               "help": {
-                "text": "",
-                "markdown": "## Description\n\nThe EJS (Embedded JavaScript) Template XSS (Cross-Site Scripting) Vulnerability Detected Due to Unescaped External Data is a security flaw that occurs when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. This allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided code snippet, the value of `redirectPage` is directly embedded into the HTML without any form of escaping or sanitization. This means that if `redirectPage` contains any malicious scripts, they will be executed when the HTML is rendered in the browser.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always escape external data before including it in your HTML. This can be done using the `escape` function provided by EJS. \n\n## Source Code Fix Recommendation\n\nHere is how you can fix the vulnerability in the provided code snippet:\n\n```html\n<input type=\"hidden\" name=\"redirectPage\" value=\"<%= ejs.escape(redirectPage) %>\" />\n```\n\n## Library Dependencies\n\nThe code example requires the following library dependencies to execute properly:\n\n- EJS\n\n## OWASP Resources\n\n- [OWASP Cross-Site Scripting (XSS)](https://owasp.org/www-community/attacks/xss/)\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+                "text": ""
               },
               "properties": {
                 "tags": [
-                  "javascript.express.security.audit.xss.ejs.explicit-unescape.template-explicit-unescape"
+                  "resources.rules.dom-xss-finder"
                 ]
               }
             },
             {
-              "id": "glog-640982db-7210-4e1b-9884-25a48195ad9a",
+              "id": "glog-023f6f76-afc8-478e-b0d2-e5e631300e5a",
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.dom-xss-finder"
+                ]
+              }
+            },
+            {
+              "id": "glog-679a8ad2-1227-40db-a0cf-b3683e6d26f5",
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.direct-response-write"
+                ]
+              }
+            },
+            {
+              "id": "glog-d69f80a3-923f-4816-b80a-d54438c096f1",
               "help": {
                 "text": "",
                 "markdown": "## Description\n\nThe `Math.random()` function in JavaScript is not suitable for generating cryptographically secure random numbers. This is because it is a pseudorandom number generator and its output can be predicted if the initial seed is known. This makes it vulnerable to attacks where an attacker can predict the output of `Math.random()` and use this information to compromise the security of the application.\n\nThe `crypto.pseudoRandomBytes()` function in Node.js is also not suitable for generating cryptographically secure random numbers. This is because it uses a pseudorandom number generator that is not cryptographically strong. This makes it vulnerable to attacks where an attacker can predict the output of `crypto.pseudoRandomBytes()` and use this information to compromise the security of the application.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, use a function that generates cryptographically secure random numbers. In Node.js, you can use the `crypto.randomBytes()` function. This function generates a buffer of cryptographically secure random bytes.\n\n## Source Code Fix Recommendation\n\nHere is how you can fix the code:\n\n```javascript\nconst crypto = require('crypto');\n\nfunction secureRandom(min, max) {\n    var range = max - min;\n    var bytesNeeded = Math.ceil(Math.log2(range + 1) / 8);\n    var randomBytes = crypto.randomBytes(bytesNeeded);\n    var randomNumber = parseInt(randomBytes.toString('hex'), 16);\n    return (randomNumber % (range + 1)) + min;\n}\n\nreturn secureRandom(min, max);\n```\n\n## Library Dependencies\n\nThe code example requires the `crypto` library, which is a built-in module in Node.js.\n\n## References\n\n- [CWE-338: Use of Cryptographically Weak PRNG](https://cwe.mitre.org/data/definitions/338.html)"
@@ -199,7 +175,31 @@
               }
             },
             {
-              "id": "glog-93fedfe9-928f-420c-978f-89877488e3f7",
+              "id": "glog-a0143acc-612c-431b-a988-e78a36104214",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe EJS (Embedded JavaScript) Template XSS (Cross-Site Scripting) Vulnerability Detected Due to Unescaped External Data is a security flaw that occurs when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. This allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided code snippet, the value of `redirectPage` is directly embedded into the HTML without any form of escaping or sanitization. This means that if `redirectPage` contains any malicious scripts, they will be executed when the HTML is rendered in the browser.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always escape external data before including it in your HTML. This can be done using the `escape` function provided by EJS. \n\n## Source Code Fix Recommendation\n\nHere is how you can fix the vulnerability in the provided code snippet:\n\n```html\n<input type=\"hidden\" name=\"redirectPage\" value=\"<%= ejs.escape(redirectPage) %>\" />\n```\n\n## Library Dependencies\n\nThe code example requires the following library dependencies to execute properly:\n\n- EJS\n\n## OWASP Resources\n\n- [OWASP Cross-Site Scripting (XSS)](https://owasp.org/www-community/attacks/xss/)\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+              },
+              "properties": {
+                "tags": [
+                  "javascript.express.security.audit.xss.ejs.explicit-unescape.template-explicit-unescape"
+                ]
+              }
+            },
+            {
+              "id": "glog-e8017a75-a54c-4a22-995a-7448fe5ebe23",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe EJS Template XSS Vulnerability is a type of Cross-Site Scripting (XSS) vulnerability that occurs when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. This vulnerability can allow attackers to execute malicious scripts in the victim's browser which can lead to a variety of attacks such as stealing user sessions, defacing web sites, or redirecting the user to malicious sites.\n\nIn the provided code snippet, the vulnerability arises from the use of unescaped external data (`todo.content`) in the EJS template. This can potentially allow an attacker to inject malicious scripts through the `todo.content` field.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always escape untrusted data based on the HTML context (body, attribute, JavaScript, CSS, or URL) that the data will be placed into. In EJS, the `<%- %>` tags are used to output unescaped data into the template, which can lead to XSS vulnerabilities. Instead, use `<%= %>` tags to output escaped data.\n\n## Source Code Fix Recommendation\n\nHere is the recommended fix for the provided code snippet:\n\n```html\n<a class=\"update-link\" href=\"/edit/<%= todo._id %>\" title=\"Update this todo item\"><%= marked(todo.content) %></a>\n```\n\nIn this fix, the `<%- %>` tags are replaced with `<%= %>` tags to ensure that the `todo.content` data is properly escaped.\n\n## Library Dependencies\n\nThe provided code snippet requires the following library dependencies:\n\n- Express.js: A web application framework for Node.js.\n- EJS: A templating engine for generating HTML markup with plain JavaScript.\n- Marked: A markdown parser and compiler built for speed.\n\n## References\n\n- [OWASP Cross-Site Scripting (XSS)](https://owasp.org/www-community/attacks/xss/)\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)\n\nPlease note that all the links are active and accessible for anonymous users."
+              },
+              "properties": {
+                "tags": [
+                  "javascript.express.security.audit.xss.ejs.explicit-unescape.template-explicit-unescape"
+                ]
+              }
+            },
+            {
+              "id": "glog-52e95de1-bef0-431a-b843-fdd558a0319a",
               "help": {
                 "text": "",
                 "markdown": "## Description\n\n\"EJS Template XSS Vulnerability Detected Due to Unescaped External Data\" is a vulnerability that occurs when an application uses untrusted data in the EJS template without proper validation or escaping. This allows an attacker to inject malicious scripts into the web page, which will be executed in the browser of any user viewing that page. This type of attack is known as Cross-Site Scripting (XSS).\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always escape untrusted data based on the context in which the data is used. In the case of EJS templates, use `<%= %>` instead of `<%- %>` to automatically escape the output.\n\n## Source Code Fix Recommendation\n\nReplace `<%- body %>` with `<%= body %>`. This will ensure that any HTML special characters in `body` are properly escaped.\n\n## Library Dependencies\n\nThe code example requires the `ejs` library.\n\n## References\n\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
@@ -211,7 +211,7 @@
               }
             },
             {
-              "id": "glog-2c60d791-52d9-46e0-ae2a-f300a96c6e41",
+              "id": "glog-45cb068a-45ba-428d-be88-453bc9062e6c",
               "help": {
                 "text": "",
                 "markdown": "## Description\n\n\"Unescape Detected in Mustache Template Exposing Potential XSS Vulnerability\" is a security vulnerability that can occur in JavaScript applications that use Mustache templates. This vulnerability arises when unescaped user input is included in a Mustache template, which can lead to Cross-Site Scripting (XSS) attacks. XSS attacks allow malicious actors to inject client-side scripts into web pages viewed by other users, potentially leading to unauthorized access, data theft, or other malicious activities.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always escape user input that is included in a Mustache template. This can be done by using the double curly braces `{{ }}` instead of triple curly braces `{{{ }}}` in Mustache templates. The double curly braces will automatically escape the user input, preventing any injected scripts from being executed.\n\n## Source Code Fix Recommendation\n\nReplace:\n\n```javascript\n{{{body}}}\n```\n\nwith:\n\n```javascript\n{{body}}\n```\n\n## Library Dependencies\n\nThe code example requires the Mustache.js library to execute properly.\n\n## References\n\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
@@ -234,131 +234,7 @@
       "language": "en-US",
       "results": [
         {
-          "ruleId": "glog-ecbdd1d9-c7ad-4aa2-9cda-3e59a3829166",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "Detected Generic Secret Vulnerability"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "example111.json",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 80,
-                  "startColumn": 717,
-                  "endLine": 80,
-                  "endColumn": 1529,
-                  "snippet": {
-                    "text": "                \"markdown\": \"* Package Manager: npm\\n* Vulnerable module: bl\\n* Introduced through: goof@1.0.1, mongodb@3.5.9 and others\\n### Detailed paths\\n* _Introduced through_: goof@1.0.1 › mongodb@3.5.9 › bl@2.2.0\\n# Overview\\n[bl](https://github.com/rvagg/bl) is a library that allows you to collect buffers and access with a standard readable buffer interface.\\n\\nAffected versions of this package are vulnerable to Remote Memory Exposure. If user input ends up in `consume()` argument and can become negative, BufferList state can be corrupted, tricking it into exposing uninitialized memory via regular `.slice()` calls.\\r\\n\\r\\n## PoC by chalker\\r\\n```\\r\\nconst { BufferList } = require('bl')\\r\\nconst secret = require('crypto').randomBytes(256)\\r\\nfor (let i = 0; i < 1e6; i++) {\\r\\n  const clone = Buffer.from(secret)\\r\\n  const bl = new BufferList()\\r\\n  bl.append(Buffer.from('a'))\\r\\n  bl.consume(-1024)\\r\\n  const buf = bl.slice(1)\\r\\n  if (buf.indexOf(clone) !== -1) {\\r\\n    console.error(`Match (at ${i})`, buf)\\r\\n  }\\r\\n}\\r\\n```\\n# Remediation\\nUpgrade `bl` to version 2.2.1, 3.0.1, 4.0.3, 1.2.3 or higher.\\n# References\\n- [Github Commit](https://github.com/rvagg/bl/commit/8a8c13c880e2bef519133ea43e0e9b78b5d0c91e)\\n- [Github Commit](https://github.com/rvagg/bl/commit/d3e240e3b8ba4048d3c76ef5fb9dd1f8872d3190)\\n- [Github Commit](https://github.com/rvagg/bl/commit/dacc4ac7d5fcd6201bcf26fbd886951be9537466)\\n- [GitHub Commit](https://github.com/rvagg/bl/commit/0bd87ec97be399b129fc62feff2943ffa21bcc00)\\n- [HackerOne Report](https://hackerone.com/reports/966347)\\n\""
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "fbf5ed662d722ce658a51e2c115c8a58bb78d67730df6b1f3ddf6d55b89f4ea8304c47c1ad9ad9be5cb95e2d20fc24a47fbf621c548c0d04069fe2e75a628a34_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "glog-ee732219-2f2f-4df9-adff-6ae9379ff8d0",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "\"Potential XSS Vulnerability Detected in JavaScript Template String Interpolation\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "example111.json",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 260,
-                  "startColumn": 746,
-                  "endLine": 260,
-                  "endColumn": 1368,
-                  "snippet": {
-                    "text": "                \"markdown\": \"* Package Manager: npm\\n* Vulnerable module: handlebars\\n* Introduced through: goof@1.0.1, tap@11.1.5 and others\\n### Detailed paths\\n* _Introduced through_: goof@1.0.1 › tap@11.1.5 › nyc@11.9.0 › istanbul-reports@1.4.0 › handlebars@4.0.11\\n# Overview\\n[handlebars](https://www.npmjs.com/package/handlebars) is an extension to the Mustache templating language.\\n\\nAffected versions of this package are vulnerable to Remote Code Execution (RCE) when selecting certain compiling options to compile templates coming from an untrusted source.\\r\\n\\r\\n## POC\\r\\n```\\r\\n<script src=\\\"https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js\\\"></script> \\r\\n<script> \\r\\n// compile the template \\r\\nvar s = ` \\r\\n{{#with (__lookupGetter__ \\\"__proto__\\\")}} \\r\\n{{#with (./constructor.getOwnPropertyDescriptor . \\\"valueOf\\\")}} \\r\\n{{#with ../constructor.prototype}} \\r\\n{{../../constructor.defineProperty . \\\"hasOwnProperty\\\" ..}} \\r\\n{{/with}} \\r\\n{{/with}} \\r\\n{{/with}} \\r\\n{{#with \\\"constructor\\\"}} \\r\\n{{#with split}} \\r\\n{{pop (push \\\"alert('Vulnerable Handlebars JS when compiling in strict mode');\\\")}} \\r\\n{{#with .}} \\r\\n{{#with (concat (lookup join (slice 0 1)))}} \\r\\n{{#each (slice 2 3)}} \\r\\n{{#with (apply 0 ../..)}} \\r\\n{{.}} \\r\\n{{/with}} \\r\\n{{/each}} \\r\\n{{/with}} \\r\\n{{/with}} \\r\\n{{/with}} \\r\\n{{/with}} \\r\\n`;\\r\\nvar template = Handlebars.compile(s, { \\r\\nstrict: true \\r\\n}); \\r\\n// execute the compiled template and print the output to the console console.log(template({})); \\r\\n</script>\\r\\n```\\n# Remediation\\nUpgrade `handlebars` to version 4.7.7 or higher.\\n# References\\n- [GitHub Commit](https://github.com/handlebars-lang/handlebars.js/commit/b6d3de7123eebba603e321f04afdbae608e8fea8)\\n\""
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "86e43c626563023587a8cfefdb6e45d62abbfea33f2549b5ddb8f808ce191be315bc2438f9da237ee35216f3ccbc969dcb8d5a40645621da14cc295322320f16_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "glog-2d0cc22d-c3c3-4a0d-ad45-dff78aba47f7",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "Detected Generic Secret Vulnerability"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "app.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 83,
-                  "startColumn": 14,
-                  "endLine": 83,
-                  "endColumn": 67,
-                  "snippet": {
-                    "text": "var token = 'SECRET_TOKEN_f8ed84e8f41e4146403dd4a6bbcea5e418d23a9';"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "39c09400d1093cda9964160c303d84700d160c268ad56944ecdfed90526b847f154d5b66f58dc96a7fef5a0a2313f74ca7188929e704c5f30865c49bdf86cffa_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "glog-69f27e9d-e3a1-45fa-8483-3c6edbfc4409",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "Invalid input."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "routes/index.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 137,
-                  "startColumn": 12,
-                  "endLine": 137,
-                  "endColumn": 35,
-                  "snippet": {
-                    "text": "    time = time.replace(/\\n$/, '');"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "837fb74ab0ccb7ff61fe658da279f5e416474622759c679ac4a63c038fed16ec920117bc53c0f493271333a81af98632f636baab227e4e3a87c04b55fc1b581e_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "glog-dd315579-463d-47fe-83b8-b368cbfb306a",
+          "ruleId": "glog-d6080067-d323-47c4-a08b-43bdf5cbd051",
           "kind": "fail",
           "level": "warning",
           "message": {
@@ -389,38 +265,100 @@
           "properties": {}
         },
         {
-          "ruleId": "glog-53b66c35-6900-4834-89e2-0b9d88f5b8ca",
+          "ruleId": "glog-bd1bb94d-0719-47ff-a858-3612a7f7ad43",
           "kind": "fail",
           "level": "warning",
           "message": {
-            "text": "\"Cryptographic Weakness in crypto.pseudoRandomBytes()/Math.random() Random Number Generator\""
+            "text": "\"Potential XSS Vulnerability Detected in JavaScript Template String Interpolation\""
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "routes/index.js",
+                  "uri": "example111.json",
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 317,
-                  "startColumn": 30,
-                  "endLine": 317,
-                  "endColumn": 43,
+                  "startLine": 260,
+                  "startColumn": 746,
+                  "endLine": 260,
+                  "endColumn": 1368,
                   "snippet": {
-                    "text": "  { name: 'admin', password: Math.random().toString(32), canDelete: true },"
+                    "text": "                \"markdown\": \"* Package Manager: npm\\n* Vulnerable module: handlebars\\n* Introduced through: goof@1.0.1, tap@11.1.5 and others\\n### Detailed paths\\n* _Introduced through_: goof@1.0.1 › tap@11.1.5 › nyc@11.9.0 › istanbul-reports@1.4.0 › handlebars@4.0.11\\n# Overview\\n[handlebars](https://www.npmjs.com/package/handlebars) is an extension to the Mustache templating language.\\n\\nAffected versions of this package are vulnerable to Remote Code Execution (RCE) when selecting certain compiling options to compile templates coming from an untrusted source.\\r\\n\\r\\n## POC\\r\\n```\\r\\n<script src=\\\"https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js\\\"></script> \\r\\n<script> \\r\\n// compile the template \\r\\nvar s = ` \\r\\n{{#with (__lookupGetter__ \\\"__proto__\\\")}} \\r\\n{{#with (./constructor.getOwnPropertyDescriptor . \\\"valueOf\\\")}} \\r\\n{{#with ../constructor.prototype}} \\r\\n{{../../constructor.defineProperty . \\\"hasOwnProperty\\\" ..}} \\r\\n{{/with}} \\r\\n{{/with}} \\r\\n{{/with}} \\r\\n{{#with \\\"constructor\\\"}} \\r\\n{{#with split}} \\r\\n{{pop (push \\\"alert('Vulnerable Handlebars JS when compiling in strict mode');\\\")}} \\r\\n{{#with .}} \\r\\n{{#with (concat (lookup join (slice 0 1)))}} \\r\\n{{#each (slice 2 3)}} \\r\\n{{#with (apply 0 ../..)}} \\r\\n{{.}} \\r\\n{{/with}} \\r\\n{{/each}} \\r\\n{{/with}} \\r\\n{{/with}} \\r\\n{{/with}} \\r\\n{{/with}} \\r\\n`;\\r\\nvar template = Handlebars.compile(s, { \\r\\nstrict: true \\r\\n}); \\r\\n// execute the compiled template and print the output to the console console.log(template({})); \\r\\n</script>\\r\\n```\\n# Remediation\\nUpgrade `handlebars` to version 4.7.7 or higher.\\n# References\\n- [GitHub Commit](https://github.com/handlebars-lang/handlebars.js/commit/b6d3de7123eebba603e321f04afdbae608e8fea8)\\n\""
                   }
                 }
               }
             }
           ],
           "fingerprints": {
-            "matchBasedId/v1": "bae4b8f215bac7edb4be16b2fd17c9727b7af5dfd12e750273bec10c6cb5b1785492912422a96f5e52a9d2efab752852a10910e96abdb3fdbf32a6a05c650125_0"
+            "matchBasedId/v1": "86e43c626563023587a8cfefdb6e45d62abbfea33f2549b5ddb8f808ce191be315bc2438f9da237ee35216f3ccbc969dcb8d5a40645621da14cc295322320f16_0"
           },
           "properties": {}
         },
         {
-          "ruleId": "glog-14e927c3-a8f0-4f31-8196-2fa213117201",
+          "ruleId": "glog-9d72e817-253e-424a-af54-1bbaa19dfad6",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Detected Generic Secret Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 83,
+                  "startColumn": 14,
+                  "endLine": 83,
+                  "endColumn": 67,
+                  "snippet": {
+                    "text": "var token = 'SECRET_TOKEN_f8ed84e8f41e4146403dd4a6bbcea5e418d23a9';"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "39c09400d1093cda9964160c303d84700d160c268ad56944ecdfed90526b847f154d5b66f58dc96a7fef5a0a2313f74ca7188929e704c5f30865c49bdf86cffa_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-ccf4e1d3-83a8-41d2-83e9-47f0b7aa6fce",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Detected Generic Secret Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "example111.json",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 80,
+                  "startColumn": 717,
+                  "endLine": 80,
+                  "endColumn": 1529,
+                  "snippet": {
+                    "text": "                \"markdown\": \"* Package Manager: npm\\n* Vulnerable module: bl\\n* Introduced through: goof@1.0.1, mongodb@3.5.9 and others\\n### Detailed paths\\n* _Introduced through_: goof@1.0.1 › mongodb@3.5.9 › bl@2.2.0\\n# Overview\\n[bl](https://github.com/rvagg/bl) is a library that allows you to collect buffers and access with a standard readable buffer interface.\\n\\nAffected versions of this package are vulnerable to Remote Memory Exposure. If user input ends up in `consume()` argument and can become negative, BufferList state can be corrupted, tricking it into exposing uninitialized memory via regular `.slice()` calls.\\r\\n\\r\\n## PoC by chalker\\r\\n```\\r\\nconst { BufferList } = require('bl')\\r\\nconst secret = require('crypto').randomBytes(256)\\r\\nfor (let i = 0; i < 1e6; i++) {\\r\\n  const clone = Buffer.from(secret)\\r\\n  const bl = new BufferList()\\r\\n  bl.append(Buffer.from('a'))\\r\\n  bl.consume(-1024)\\r\\n  const buf = bl.slice(1)\\r\\n  if (buf.indexOf(clone) !== -1) {\\r\\n    console.error(`Match (at ${i})`, buf)\\r\\n  }\\r\\n}\\r\\n```\\n# Remediation\\nUpgrade `bl` to version 2.2.1, 3.0.1, 4.0.3, 1.2.3 or higher.\\n# References\\n- [Github Commit](https://github.com/rvagg/bl/commit/8a8c13c880e2bef519133ea43e0e9b78b5d0c91e)\\n- [Github Commit](https://github.com/rvagg/bl/commit/d3e240e3b8ba4048d3c76ef5fb9dd1f8872d3190)\\n- [Github Commit](https://github.com/rvagg/bl/commit/dacc4ac7d5fcd6201bcf26fbd886951be9537466)\\n- [GitHub Commit](https://github.com/rvagg/bl/commit/0bd87ec97be399b129fc62feff2943ffa21bcc00)\\n- [HackerOne Report](https://hackerone.com/reports/966347)\\n\""
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "fbf5ed662d722ce658a51e2c115c8a58bb78d67730df6b1f3ddf6d55b89f4ea8304c47c1ad9ad9be5cb95e2d20fc24a47fbf621c548c0d04069fe2e75a628a34_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-bb1063e3-981e-4ca2-afa0-1d1e9cb987e8",
           "kind": "fail",
           "level": "warning",
           "message": {
@@ -434,55 +372,24 @@
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 338,
-                  "startColumn": 7,
-                  "endLine": 338,
-                  "endColumn": 66,
+                  "startLine": 137,
+                  "startColumn": 12,
+                  "endLine": 137,
+                  "endColumn": 35,
                   "snippet": {
-                    "text": "      res.status(403).send({ ok: false, error: 'Access denied' });"
+                    "text": "    time = time.replace(/\\n$/, '');"
                   }
                 }
               }
             }
           ],
           "fingerprints": {
-            "matchBasedId/v1": "1ea3444a97c0c0eb7ac562ca4eebde88b0822a50ee3a5b0b15807c6318c42fefc5d11c6346e8d5cfac8327683163253d9fecdca26dab931361fc453e9a374a22_0"
+            "matchBasedId/v1": "837fb74ab0ccb7ff61fe658da279f5e416474622759c679ac4a63c038fed16ec920117bc53c0f493271333a81af98632f636baab227e4e3a87c04b55fc1b581e_0"
           },
           "properties": {}
         },
         {
-          "ruleId": "glog-df1ff019-8e3f-42b7-97a2-6a26d9a250a7",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "\"Potential XSS Vulnerability from User-Controlled Data in HTML String\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "routes/index.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 58,
-                  "startColumn": 3,
-                  "endLine": 58,
-                  "endColumn": 45,
-                  "snippet": {
-                    "text": "  console.log(`User logged in: ${username}`)"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "2ce261fceaa65dd184dd6141671983f39db70315772ddcd6506c5cb038ee93be63c2f20e1286ebe30f572f15210077db10f5ba765b3ea26050ffd22d1951a870_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "glog-a5f28741-a404-4074-ad7c-3ef2aab8fc0c",
+          "ruleId": "glog-66181aaa-a767-45cc-b3cb-1cf19d2f69af",
           "kind": "fail",
           "level": "warning",
           "message": {
@@ -513,11 +420,11 @@
           "properties": {}
         },
         {
-          "ruleId": "glog-99650436-ac42-485d-930b-29d26f6ac4bc",
+          "ruleId": "glog-ad5257fe-24fc-4258-a47a-d77eadeca499",
           "kind": "fail",
           "level": "warning",
           "message": {
-            "text": "Invalid input."
+            "text": "\"Potential XSS Vulnerability from User-Controlled Data in HTML String\""
           },
           "locations": [
             {
@@ -527,28 +434,28 @@
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 354,
-                  "startColumn": 5,
-                  "endLine": 354,
-                  "endColumn": 27,
+                  "startLine": 58,
+                  "startColumn": 3,
+                  "endLine": 58,
+                  "endColumn": 45,
                   "snippet": {
-                    "text": "    res.send({ ok: true });"
+                    "text": "  console.log(`User logged in: ${username}`)"
                   }
                 }
               }
             }
           ],
           "fingerprints": {
-            "matchBasedId/v1": "5e69ac40a767d7ede9b9ae43ebc95b6e7c88a31098d08aa659aaa5bda1dec7213799a5f89cbce04d5bc7950d7d39af6329e811e7ffb5bb5f910202a6c53dbd3c_0"
+            "matchBasedId/v1": "2ce261fceaa65dd184dd6141671983f39db70315772ddcd6506c5cb038ee93be63c2f20e1286ebe30f572f15210077db10f5ba765b3ea26050ffd22d1951a870_0"
           },
           "properties": {}
         },
         {
-          "ruleId": "glog-f8cf691a-64a5-4852-b60c-de14e10ed926",
+          "ruleId": "glog-cf1be48b-8b7e-4ca4-957a-9147b5fcc7bf",
           "kind": "fail",
           "level": "warning",
           "message": {
-            "text": "Invalid input."
+            "text": "\"Cryptographic Weakness in crypto.pseudoRandomBytes()/Math.random() Random Number Generator\""
           },
           "locations": [
             {
@@ -558,55 +465,24 @@
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 365,
-                  "startColumn": 5,
-                  "endLine": 365,
-                  "endColumn": 27,
+                  "startLine": 317,
+                  "startColumn": 30,
+                  "endLine": 317,
+                  "endColumn": 43,
                   "snippet": {
-                    "text": "    res.send({ ok: true });"
+                    "text": "  { name: 'admin', password: Math.random().toString(32), canDelete: true },"
                   }
                 }
               }
             }
           ],
           "fingerprints": {
-            "matchBasedId/v1": "c2ace50695f13f0d435116b57b1162746bf090c77eaab09479ef44717f73d9c0368e57cefa4a24e90e29fa663d1bd21d43a9af0d9a0bc1fb37d23021d2b6972a_0"
+            "matchBasedId/v1": "bae4b8f215bac7edb4be16b2fd17c9727b7af5dfd12e750273bec10c6cb5b1785492912422a96f5e52a9d2efab752852a10910e96abdb3fdbf32a6a05c650125_0"
           },
           "properties": {}
         },
         {
-          "ruleId": "glog-ea109702-f8db-4ae9-9e4a-623c31899f3e",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "Invalid input."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "routes/index.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 360,
-                  "startColumn": 7,
-                  "endLine": 360,
-                  "endColumn": 66,
-                  "snippet": {
-                    "text": "      res.status(403).send({ ok: false, error: 'Access denied' });"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "66b659d9ac40b2ece693c9e54593653c1a21c01ee327e2693eb3dfb63b97e5fd670df83e442fd8e68cfc90e9e91d86b9ceca6b0d87d810d614dd92a15dd9cef6_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "glog-f42a8451-50fd-49b5-9103-14fc259f1b50",
+          "ruleId": "glog-7f108c6f-a396-4c5b-99af-533713d11a5a",
           "kind": "fail",
           "level": "warning",
           "message": {
@@ -637,69 +513,131 @@
           "properties": {}
         },
         {
-          "ruleId": "glog-f0a601c5-db4a-4676-9469-d0ebc199926c",
+          "ruleId": "glog-897c4bf0-7272-4a76-ac51-4cc817291471",
           "kind": "fail",
           "level": "warning",
           "message": {
-            "text": "EJS Template XSS Vulnerability Detected Due to Unescaped External Data"
+            "text": "Invalid input."
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "views/index.ejs",
+                  "uri": "routes/index.js",
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 20,
-                  "startColumn": 87,
-                  "endLine": 20,
-                  "endColumn": 126,
+                  "startLine": 354,
+                  "startColumn": 5,
+                  "endLine": 354,
+                  "endColumn": 27,
                   "snippet": {
-                    "text": "    <a class=\"update-link\" href=\"/edit/<%= todo._id %>\" title=\"Update this todo item\"><%- marked(new String(todo.content)) %></a>"
+                    "text": "    res.send({ ok: true });"
                   }
                 }
               }
             }
           ],
           "fingerprints": {
-            "matchBasedId/v1": "8a22f8481d9683762baa2e42e9fbf984ce5becef7857927b037b7465defcc1d90085c7a666ebdd3c492cd52546948ffca0d78b067a9f8cc98747e6c8a6af6127_0"
+            "matchBasedId/v1": "5e69ac40a767d7ede9b9ae43ebc95b6e7c88a31098d08aa659aaa5bda1dec7213799a5f89cbce04d5bc7950d7d39af6329e811e7ffb5bb5f910202a6c53dbd3c_0"
           },
           "properties": {}
         },
         {
-          "ruleId": "glog-5acf3242-8800-46a6-88c0-44885529e060",
+          "ruleId": "glog-ef82e215-576f-4709-9e2b-b84bd5eba4cd",
           "kind": "fail",
           "level": "warning",
           "message": {
-            "text": "EJS Template XSS Vulnerability Detected Due to Unescaped External Data"
+            "text": "Invalid input."
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "views/admin.ejs",
+                  "uri": "routes/index.js",
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 17,
-                  "startColumn": 55,
-                  "endLine": 17,
-                  "endColumn": 74,
+                  "startLine": 338,
+                  "startColumn": 7,
+                  "endLine": 338,
+                  "endColumn": 66,
                   "snippet": {
-                    "text": "      <input type=\"hidden\" name=\"redirectPage\" value=\"<%- redirectPage %>\" />"
+                    "text": "      res.status(403).send({ ok: false, error: 'Access denied' });"
                   }
                 }
               }
             }
           ],
           "fingerprints": {
-            "matchBasedId/v1": "38efd22c5a07ae3951ca032dc993871c3872d2eccfee0f26f4241b9152a9c2b21c76b6c444391ea08d387c35e446494cdd150332936b8b78db8936a33b1c3826_0"
+            "matchBasedId/v1": "1ea3444a97c0c0eb7ac562ca4eebde88b0822a50ee3a5b0b15807c6318c42fefc5d11c6346e8d5cfac8327683163253d9fecdca26dab931361fc453e9a374a22_0"
           },
           "properties": {}
         },
         {
-          "ruleId": "glog-640982db-7210-4e1b-9884-25a48195ad9a",
+          "ruleId": "glog-023f6f76-afc8-478e-b0d2-e5e631300e5a",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Invalid input."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "routes/index.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 360,
+                  "startColumn": 7,
+                  "endLine": 360,
+                  "endColumn": 66,
+                  "snippet": {
+                    "text": "      res.status(403).send({ ok: false, error: 'Access denied' });"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "66b659d9ac40b2ece693c9e54593653c1a21c01ee327e2693eb3dfb63b97e5fd670df83e442fd8e68cfc90e9e91d86b9ceca6b0d87d810d614dd92a15dd9cef6_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-679a8ad2-1227-40db-a0cf-b3683e6d26f5",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Invalid input."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "routes/index.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 365,
+                  "startColumn": 5,
+                  "endLine": 365,
+                  "endColumn": 27,
+                  "snippet": {
+                    "text": "    res.send({ ok: true });"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "c2ace50695f13f0d435116b57b1162746bf090c77eaab09479ef44717f73d9c0368e57cefa4a24e90e29fa663d1bd21d43a9af0d9a0bc1fb37d23021d2b6972a_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-d69f80a3-923f-4816-b80a-d54438c096f1",
           "kind": "fail",
           "level": "warning",
           "message": {
@@ -730,7 +668,69 @@
           "properties": {}
         },
         {
-          "ruleId": "glog-93fedfe9-928f-420c-978f-89877488e3f7",
+          "ruleId": "glog-a0143acc-612c-431b-a988-e78a36104214",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "EJS Template XSS Vulnerability Detected Due to Unescaped External Data"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "views/admin.ejs",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 17,
+                  "startColumn": 55,
+                  "endLine": 17,
+                  "endColumn": 74,
+                  "snippet": {
+                    "text": "      <input type=\"hidden\" name=\"redirectPage\" value=\"<%- redirectPage %>\" />"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "38efd22c5a07ae3951ca032dc993871c3872d2eccfee0f26f4241b9152a9c2b21c76b6c444391ea08d387c35e446494cdd150332936b8b78db8936a33b1c3826_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-e8017a75-a54c-4a22-995a-7448fe5ebe23",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "EJS Template XSS Vulnerability Detected Due to Unescaped External Data"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "views/index.ejs",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 20,
+                  "startColumn": 87,
+                  "endLine": 20,
+                  "endColumn": 126,
+                  "snippet": {
+                    "text": "    <a class=\"update-link\" href=\"/edit/<%= todo._id %>\" title=\"Update this todo item\"><%- marked(new String(todo.content)) %></a>"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "8a22f8481d9683762baa2e42e9fbf984ce5becef7857927b037b7465defcc1d90085c7a666ebdd3c492cd52546948ffca0d78b067a9f8cc98747e6c8a6af6127_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-52e95de1-bef0-431a-b843-fdd558a0319a",
           "kind": "fail",
           "level": "warning",
           "message": {
@@ -761,7 +761,7 @@
           "properties": {}
         },
         {
-          "ruleId": "glog-2c60d791-52d9-46e0-ae2a-f300a96c6e41",
+          "ruleId": "glog-45cb068a-45ba-428d-be88-453bc9062e6c",
           "kind": "fail",
           "level": "warning",
           "message": {
