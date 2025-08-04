@@ -12,10 +12,10 @@
           "informationUri": "https://www.glog.ai",
           "rules": [
             {
-              "id": "glog-ea7b690b-6786-40a1-b4ae-00a5e694e203",
+              "id": "glog-bff0f977-e3aa-4843-b756-54b9b7499205",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\n\"Detected Generic Secret Vulnerability\" is a common security issue in JavaScript programming where sensitive information such as API keys, passwords, or tokens are hard-coded directly into the source code. This is a bad practice as it exposes these secrets to anyone who has access to the code, making it easier for malicious actors to exploit them.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, avoid hard-coding secrets directly into your source code. Instead, use environment variables or secure secret management systems to store and access these secrets. This way, the secrets are not exposed in the code and can be managed securely and separately from the codebase.\n\n## Source Code Fix Recommendation\n\nInstead of hard-coding the token directly into the code, you can use an environment variable to store the token. Here's how you can do it:\n\n```javascript\nvar token = process.env.SECRET_TOKEN;\n```\n\nThen, you can set the `SECRET_TOKEN` environment variable in your environment before running your application. This way, the token is not exposed in the code.\n\n## Library Dependencies\n\nThe code example does not require any library dependencies to execute properly.\n\n## OWASP Resources\n\n- [OWASP Top 10 2017: A2-Broken Authentication](https://owasp.org/www-project-top-ten/2017/A2_2017-Broken_Authentication)\n- [OWASP Cheat Sheet: Secrets Management](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-798: Use of Hard-coded Credentials](https://cwe.mitre.org/data/definitions/798.html)"
+                "markdown": "## Description\n\n\"Detected Generic Secret Vulnerability\" is a common security issue in JavaScript programming where sensitive information such as API keys, passwords, or tokens are hard-coded directly into the source code. This is a bad practice as it exposes these secrets to anyone who has access to the code, making it easier for malicious actors to exploit them.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, avoid hard-coding secrets directly into your source code. Instead, use environment variables or a secure configuration management system to store and manage your secrets. This way, the secrets are not exposed in the code and can be easily changed if needed.\n\n## Source Code Fix Recommendation\n\nInstead of hard-coding the token directly into the code, you can use an environment variable to store it. Here's how you can do it:\n\n```javascript\nvar token = process.env.SECRET_TOKEN;\n```\n\nThen, you can set the `SECRET_TOKEN` environment variable in your server or local development environment.\n\n## Library Dependencies\n\nThe code example does not require any library dependencies to execute properly.\n\n## OWASP Resources\n\n- [OWASP Top 10 2017: A2-Broken Authentication](https://owasp.org/www-project-top-ten/2017/A2_2017-Broken_Authentication)\n- [OWASP Cheat Sheet: Secrets Management](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-798: Use of Hard-coded Credentials](https://cwe.mitre.org/data/definitions/798.html)"
               },
               "properties": {
                 "tags": [
@@ -24,70 +24,10 @@
               }
             },
             {
-              "id": "glog-ca101dcf-e7b7-4d4d-a2d2-8b106efbac40",
+              "id": "glog-a2af60da-7a80-410e-8ace-b121ace6f7e7",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nPotential Root User Exploitation in Docker Container is a vulnerability that arises when Docker containers are run as root, which is the default user when running a Docker container. This can be a serious security issue because if an attacker manages to break out from the container, they would have root access to the host system. In the context of JavaScript programming, this vulnerability can be exploited if the Node.js application running inside the Docker container is compromised.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to run Docker containers as a non-root user. This can be achieved by creating a new user in the Dockerfile and switching to this user before executing any commands. \n\n## Source Code Fix Recommendation\n\nHere is how you can modify your Dockerfile to run the container as a non-root user:\n\n```Dockerfile\nFROM node:14\nWORKDIR /usr/src/app\nCOPY package*.json ./\nRUN npm install\nCOPY . .\nRUN chown -R node:node .\nUSER node\nENTRYPOINT [\"npm\", \"start\"]\n```\n\nIn this Dockerfile, a new user named 'node' is created and the ownership of the application directory is changed to this user. The `USER node` directive ensures that the container runs as this non-root user.\n\n## Library Dependencies\n\nThe code example provided does not require any additional library dependencies to execute properly. It uses the `npm` command which comes pre-installed with the Node.js Docker image.\n\n## References\n\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
-              },
-              "properties": {
-                "tags": [
-                  "dockerfile.security.missing-user-entrypoint.missing-user-entrypoint"
-                ]
-              }
-            },
-            {
-              "id": "glog-1ffd9386-a599-43b9-8193-18997425ecc1",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nThe 'goof-mongo' Service Privilege Escalation Vulnerability through setuid/setgid Binaries is a security flaw that allows an attacker to escalate their privileges on a system by exploiting the setuid/setgid binaries. This vulnerability is not specific to JavaScript but can be exploited in any system where these binaries are improperly configured.\n\nIn Unix-like operating systems, setuid (\"set user ID upon execution\") and setgid (\"set group ID upon execution\") are permissions that can be set on executable files. They allow the process to run with the privileges of the file's owner or group respectively, rather than the privileges of the user who launched the process. If these permissions are set on a file that has a vulnerability, an attacker can exploit that vulnerability to run code with the elevated privileges.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, follow these general guidelines:\n\n1. Minimize the use of setuid/setgid binaries as much as possible. Only use them when absolutely necessary.\n2. Regularly audit your setuid/setgid binaries to ensure they are still needed and are not vulnerable to exploitation.\n3. Keep your system and all its software up-to-date. Many vulnerabilities are fixed in updates.\n4. Use security tools to monitor for unusual activity that could indicate an exploitation attempt.\n\n## Source Code Fix Recommendation\n\nSince this vulnerability is not specific to JavaScript, there's no specific source code fix. However, you can follow these general recommendations:\n\n1. Avoid writing code that requires elevated privileges whenever possible.\n2. If you must use setuid/setgid, ensure your code is secure and free of vulnerabilities that could be exploited.\n3. Regularly review and update your code to fix any potential security issues.\n\n## References\n\n- [OWASP - Insecure Direct Object References](https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control)\n- [CWE-276: Incorrect Default Permissions](https://cwe.mitre.org/data/definitions/276.html)\n\nPlease note that the links provided are valid and active for anonymous users at the time of writing."
-              },
-              "properties": {
-                "tags": [
-                  "yaml.docker-compose.security.no-new-privileges.no-new-privileges"
-                ]
-              }
-            },
-            {
-              "id": "glog-b166fd0f-ba19-4969-91c9-b1e4ed582586",
-              "help": {
-                "text": "",
-                "markdown": "The vulnerability you're referring to doesn't seem to be directly related to JavaScript programming language. Instead, it's more about a potential privilege escalation vulnerability in Unix-like operating systems, which can be exploited via setuid/setgid binaries. \n\nIn Unix-like operating systems, setuid (set user ID upon execution) and setgid (set group ID upon execution) are Unix access rights flags that allow users to run an executable with the permissions of the executable's owner or group respectively. They are often used to allow users on a computer system to run programs with temporarily elevated privileges in order to perform a specific task. While the most common use is to allow users to print to system printers, these can be misused to perform privileged actions and hence lead to a privilege escalation vulnerability.\n\nIn the context of your code, it seems to be a Docker Compose configuration for a MongoDB service. If the MongoDB service is running with higher privileges and there's a way for an attacker to exploit this (for example, by exploiting a vulnerability in MongoDB), they could potentially gain the same privileges.\n\nMitigation advice:\n\n1. Run services with least privilege: Services should run with the least privilege necessary to perform their tasks to limit the potential damage of a breach.\n\n2. Regularly update and patch all software: This includes the operating system, MongoDB, and any other software you're using.\n\n3. Secure MongoDB: Follow MongoDB's security checklist to ensure that your database is secure.\n\n4. Use security tools: Use tools like SELinux, AppArmor, or seccomp to limit what a compromised service can do.\n\n5. Monitor for suspicious activity: Regularly check logs and use intrusion detection systems to spot any potential breaches.\n\nUnfortunately, without more specific code, it's hard to provide a source code fix recommendation. However, the general advice above should help you secure your system.\n\nLibrary dependencies:\n\nThe code example you've provided is a Docker Compose configuration file. It doesn't have any library dependencies as such, but it does require Docker and Docker Compose to be installed on the system.\n\nOWASP resources:\n\n- [OWASP Docker Security](https://owasp.org/www-project-docker-top-10/)\n- [OWASP Top 10](https://owasp.org/www-project-top-ten/)\n\nCWE:\n\n- [CWE-269: Improper Privilege Management](https://cwe.mitre.org/data/definitions/269.html)\n- [CWE-276: Incorrect Default Permissions](https://cwe.mitre.org/data/definitions/276.html)"
-              },
-              "properties": {
-                "tags": [
-                  "resources.rules.no-new-privileges"
-                ]
-              }
-            },
-            {
-              "id": "glog-ec4829c2-11fe-486c-8cc5-908ba01abc65",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nA Privilege Escalation Vulnerability in 'good-mysql' Service refers to a security flaw in the 'good-mysql' service of a JavaScript application that allows an attacker to gain elevated access to resources that are normally protected from an application or user. This can lead to unauthorized actions such as data manipulation, access to sensitive information, or even taking control of the system.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to:\n\n1. Always validate user input: Never trust user input and always validate it before processing. This can help prevent SQL Injection attacks which can lead to privilege escalation.\n\n2. Principle of least privilege: Ensure that accounts have the minimum privileges they need to do their job. If an account is compromised, this will limit the damage that can be done.\n\n3. Regularly update and patch systems: Ensure that the 'good-mysql' service and all other components of the system are regularly updated and patched. This can help protect against known vulnerabilities that could be exploited for privilege escalation.\n\n4. Use prepared statements: Prepared statements ensure that an attacker cannot change the intent of a query, even if they inject malicious content.\n\n## Source Code Fix Recommendation\n\nWithout a specific code example, it's hard to provide a precise fix. However, here's a general recommendation:\n\nIf you're using 'good-mysql' to execute SQL queries, switch to using prepared statements. Here's an example:\n\n```javascript\nvar mysql = require('mysql');\nvar connection = mysql.createConnection({\n  host     : 'localhost',\n  user     : 'me',\n  password : 'secret',\n  database : 'my_db'\n});\n\nconnection.connect();\n\nvar sql = \"SELECT * FROM ?? WHERE ?? = ?\";\nvar inserts = ['users', 'id', userId];\nsql = mysql.format(sql, inserts);\n\nconnection.query(sql, function (error, results, fields) {\n  if (error) throw error;\n  // ...\n});\n\nconnection.end();\n```\n\nIn this example, `??` and `?` are placeholders that get replaced by the `inserts` array. This ensures that the SQL query is properly escaped, preventing SQL injection attacks.\n\n## References\n\n- [CWE-269: Improper Privilege Management](https://cwe.mitre.org/data/definitions/269.html)"
-              },
-              "properties": {
-                "tags": [
-                  "yaml.docker-compose.security.no-new-privileges.no-new-privileges"
-                ]
-              }
-            },
-            {
-              "id": "glog-7dce8a5e-e107-4368-8e28-c6a664f4e1d5",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nThe 'Good-mysql' service privilege escalation vulnerability through setuid or setgid binaries is a security flaw that allows an attacker to escalate their privileges on the system. This vulnerability occurs when a program is set to run with higher privileges (setuid or setgid) and it has a security flaw that allows an attacker to exploit it. In this case, the 'Good-mysql' service is running with root privileges, which is a high risk if there is a security flaw in the service.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should avoid running services with root privileges unless absolutely necessary. If a service must run with higher privileges, ensure that it is secure and regularly updated to prevent exploitation of known vulnerabilities. \n\n## Source Code Fix Recommendation\n\nIn the provided code, the 'Good-mysql' service is running with root privileges. This can be fixed by creating a new user with limited privileges and running the service with this user. Here is an example of how to do this:\n\n```javascript\ngood-mysql:\n    container_name: goof-mysql\n    image: mysql:5\n    environment:\n      MYSQL_USER: limiteduser\n      MYSQL_PASSWORD: password\n      MYSQL_DATABASE: acme\n    ports:\n      - \"3306:3306\"\n```\n\nIn this example, a new user 'limiteduser' is created with a password 'password'. This user has limited privileges and is used to run the 'Good-mysql' service.\n\n## Library Dependencies\n\nThe provided code does not require any library dependencies to execute properly.\n\n## OWASP and CWE Links\n\n- [CWE-269: Improper Privilege Management](https://cwe.mitre.org/data/definitions/269.html)\n\nPlease note that these links are subject to change and may not be available at a later date."
-              },
-              "properties": {
-                "tags": [
-                  "resources.rules.no-new-privileges"
-                ]
-              }
-            },
-            {
-              "id": "glog-73cebbdd-ab9a-456d-a391-65d19e5bfde7",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nThe `bl` library in JavaScript, which is used for collecting buffers and accessing them with a standard readable buffer interface, has a vulnerability that can lead to Remote Memory Exposure. This vulnerability is introduced when user input ends up in the `consume()` argument and can become negative. This can corrupt the BufferList state, tricking it into exposing uninitialized memory via regular `.slice()` calls.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to sanitize and validate user inputs to ensure they cannot become negative. Additionally, it is important to keep your dependencies up-to-date. In this case, you should upgrade `bl` to version 2.2.1, 3.0.1, 4.0.3, 1.2.3 or higher.\n\n## Source Code Fix Recommendation\n\nUpgrade your `bl` library to a non-vulnerable version. You can do this by updating your `package.json` file:\n\n```json\n\"dependencies\": {\n  \"bl\": \">=2.2.1\"\n}\n```\n\nThen run `npm install` to install the updated package.\n\n## Library Dependencies\n\nThe code example requires the following library dependencies:\n\n- `bl`\n- `crypto`\n\n## References\n\n- [OWASP Top 10-2017 A3-Sensitive Data Exposure](https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure)\n- [CWE-200: Information Exposure](https://cwe.mitre.org/data/definitions/200.html)\n\nPlease note that the links provided are valid and active for anonymous users at the time of writing this report."
+                "markdown": "## Description\n\nThe `bl` library in JavaScript, which is used to collect buffers and access them with a standard readable buffer interface, has a vulnerability that can lead to Remote Memory Exposure. This vulnerability is present in versions of the package prior to 2.2.1, 3.0.1, 4.0.3, 1.2.3. If user input is passed to the `consume()` function and can become negative, the BufferList state can be corrupted, which can lead to the exposure of uninitialized memory through regular `.slice()` calls.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to upgrade the `bl` library to version 2.2.1, 3.0.1, 4.0.3, 1.2.3 or higher. It is also important to validate and sanitize all user inputs before using them in your application to prevent such vulnerabilities.\n\n## Source Code Fix Recommendation\n\nUpgrade your `bl` library to a non-vulnerable version by updating your `package.json` file:\n\n```json\n\"dependencies\": {\n  \"bl\": \">=2.2.1\"\n}\n```\n\nThen run `npm install` to install the updated package.\n\n## Library Dependencies\n\nThe code example requires the following library dependencies:\n\n- `bl`\n- `crypto`\n\n## References\n\n- [OWASP Top 10-2017 A3-Sensitive Data Exposure](https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure)\n- [CWE-200: Information Exposure](https://cwe.mitre.org/data/definitions/200.html)\n\nPlease note that the links provided are valid and active at the time of writing this report."
               },
               "properties": {
                 "tags": [
@@ -96,10 +36,10 @@
               }
             },
             {
-              "id": "glog-5fab6080-0f29-47ff-b8dc-71ca4473e144",
+              "id": "glog-86571f38-63ff-44ba-968c-6c2c1abab408",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nThe vulnerability is related to the Handlebars JavaScript library, which is an extension to the Mustache templating language. Affected versions of this package are vulnerable to Remote Code Execution (RCE) when selecting certain compiling options to compile templates coming from an untrusted source. This vulnerability is a type of Cross-Site Scripting (XSS) attack, where an attacker can inject malicious scripts into web pages viewed by other users.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to upgrade the `handlebars` library to version 4.7.7 or higher. This version includes a fix for the vulnerability. \n\nIn general, to prevent XSS attacks, it is important to:\n\n- Validate and sanitize all user inputs.\n- Use appropriate response headers to prevent XSS in HTTP responses.\n- Use secure coding practices to prevent XSS vulnerabilities in your code.\n\n## Source Code Fix Recommendation\n\nUpgrade the `handlebars` library in your `package.json` file:\n\n```json\n\"dependencies\": {\n  \"handlebars\": \"^4.7.7\"\n}\n```\n\nThen run `npm install` to install the updated package.\n\n## Library Dependencies\n\nThe code example requires the following library dependencies:\n\n- `handlebars`\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)\n\nPlease note that the links provided are valid and active for anonymous users at the time of writing this report."
+                "markdown": "## Description\n\nThe vulnerability is related to the use of JavaScript template string interpolation in the Handlebars library. Affected versions of this package are vulnerable to Remote Code Execution (RCE) when selecting certain compiling options to compile templates coming from an untrusted source. This is a type of Cross-Site Scripting (XSS) vulnerability, where an attacker can inject malicious scripts into web pages viewed by other users.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to upgrade the `handlebars` library to version 4.7.7 or higher. This version includes a fix for the vulnerability.\n\n## Source Code Fix Recommendation\n\nThe source code fix is to upgrade the `handlebars` library to a non-vulnerable version. This can be done by updating the version in your `package.json` file and running `npm install`:\n\n```json\n\"dependencies\": {\n  \"handlebars\": \"^4.7.7\"\n}\n```\n\nThen run:\n\n```bash\nnpm install\n```\n\n## Library Dependencies\n\nThe code example requires the following library dependencies to execute properly:\n\n- `handlebars`\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)\n- [GitHub Commit](https://github.com/handlebars-lang/handlebars.js/commit/b6d3de7123eebba603e321f04afdbae608e8fea8)"
               },
               "properties": {
                 "tags": [
@@ -108,22 +48,10 @@
               }
             },
             {
-              "id": "glog-c776bc1d-bbdd-4969-9253-831315cf93d0",
+              "id": "glog-4d250cf6-a086-4860-8ca9-9ff7584442d2",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nThe \"JavaScript Sink Vulnerability Detected through User-Input Controlled Parameter Passing\" vulnerability refers to a situation where an attacker can manipulate user-input controlled parameters to inject malicious scripts. In the provided code snippet, the `replace()` function is used to remove newline characters from the `time` variable. If the `time` variable is controlled by user input, it could be manipulated to include malicious scripts, leading to a Cross-Site Scripting (XSS) attack.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always validate, sanitize, and escape user inputs. This can be achieved by using built-in functions or third-party libraries that are designed to handle these tasks. \n\n## Source Code Fix Recommendation\n\n```javascript\n// Assuming express-validator library is used for input validation\nconst { check, validationResult } = require('express-validator');\n\napp.post('/submit', [\n  check('time').isString().escape()\n], (req, res) => {\n  const errors = validationResult(req);\n  if (!errors.isEmpty()) {\n    return res.status(400).json({ errors: errors.array() });\n  }\n  \n  let time = req.body.time;\n  // rest of the code\n});\n```\n\nIn the above code, the `express-validator` library is used to validate and sanitize the `time` input. If the input is not a string or contains potentially harmful characters, an error will be returned.\n\n## Library Dependencies\n\n- express-validator\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n\n## CWE\n\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
-              },
-              "properties": {
-                "tags": [
-                  "resources.rules.dom-xss-finder"
-                ]
-              }
-            },
-            {
-              "id": "glog-8c58897b-2e35-4044-81cb-fc19e6f589d5",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided code snippet, the application is logging a message to the console that includes a username. If the username is user-controlled and not properly sanitized, it could potentially lead to an XSS vulnerability.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always escape untrusted data based on the HTML context (body, attribute, JavaScript, CSS, or URL) that the data will be placed into. In this case, since the data is being placed into a JavaScript context, you should use JavaScript encoding before including the user data.\n\n## Source Code Fix Recommendation\n\n```javascript\nconsole.log(`User logged in: ${encodeURI(username)}`)\n```\n\nIn this fixed code, the `encodeURI` function is used to encode special characters in the username. This prevents any potentially malicious scripts from being executed.\n\n## Library Dependencies\n\nThe provided code snippet does not require any library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided code snippet, the application is logging a message to the console that includes a username. If the username is user-controlled and not properly sanitized, it could potentially lead to an XSS vulnerability.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always escape untrusted HTTP request data based on the context in the HTML output (HTML body, HTML attribute, JavaScript, CSS, or URL) that the data lands. \n\n## Source Code Fix Recommendation\n\nIn this specific case, since the data is being output to the console and not to the HTML, the risk of XSS is low. However, it's still a good practice to sanitize any user-controlled data. Here's how you can do it:\n\n```javascript\nconsole.log(`User logged in: ${escape(username)}`)\n```\n\nIn this case, the `escape` function will ensure that any potentially harmful characters in the username are properly escaped.\n\n## Library Dependencies\n\nThe provided code snippet does not require any additional library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
               },
               "properties": {
                 "tags": [
@@ -132,46 +60,22 @@
               }
             },
             {
-              "id": "glog-bf1a6e8e-41cf-48d0-aa4f-d448557e9c71",
+              "id": "glog-aab1adac-584c-48da-89f0-f02bd77f802e",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nThe \"JavaScript Sink Vulnerability Detected through User-Input Control Parameter\" vulnerability refers to a situation where an application does not properly validate or sanitize user input before using it in a sensitive operation. In this case, the sink is the `res.status(302).send(todo.content.toString('base64'));` line of code. This line of code is vulnerable because it directly uses user input (`todo.content`) without any form of validation or sanitization. This can lead to various types of attacks such as Cross-Site Scripting (XSS), SQL Injection, and Command Injection attacks.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always validate and sanitize user input before using it in a sensitive operation. Validation ensures that the input meets certain criteria (e.g., length, format, type, etc.), while sanitization removes or escapes any potentially harmful characters in the input.\n\n## Source Code Fix Recommendation\n\nHere is a simple fix for the vulnerability:\n\n```javascript\nvar sanitize = require('sanitize-html');\n\n// ...\n\nvar content = sanitize(todo.content);\nres.status(302).send(content.toString('base64'));\n```\n\nIn this fix, the `sanitize-html` library is used to sanitize the user input before using it.\n\n## Library Dependencies\n\nThe code example requires the following library dependencies:\n\n- `express`: A web application framework for Node.js.\n- `sanitize-html`: A library for sanitizing HTML input.\n\n## OWASP Resources\n\n- [OWASP Top 10 2017: Injection](https://owasp.org/www-project-top-ten/2017/A1_2017-Injection)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)\n- [CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')](https://cwe.mitre.org/data/definitions/89.html)\n- [CWE-77: Improper Neutralization of Special Elements used in a Command ('Command Injection')](https://cwe.mitre.org/data/definitions/77.html)"
+                "markdown": "## Description\n\nPotential Root User Exploitation in Docker Container is a security vulnerability that arises when a Docker container is run as a root user. This is a common default setting in many Docker containers. If an attacker manages to break out from the container, they could gain root access to the host system, leading to a serious security breach.\n\nIn the context of JavaScript programming, this vulnerability can occur when a Node.js application is run inside a Docker container with root user privileges. The specific vulnerability sink in this case is the ENTRYPOINT directive in the Dockerfile, which starts the Node.js application using npm.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to run the Docker container as a non-root user. This can be achieved by creating a new user in the Dockerfile and switching to this user before the application is started.\n\n## Source Code Fix Recommendation\n\nHere is a recommended fix for the Dockerfile:\n\n```Dockerfile\nFROM node:14\nWORKDIR /usr/src/app\nCOPY package*.json ./\nRUN npm install\nCOPY . .\nRUN adduser -D myuser\nUSER myuser\nENTRYPOINT [\"npm\", \"start\"]\n```\n\nIn this Dockerfile, a new user named 'myuser' is created and the USER directive is used to switch to this user. The Node.js application is then started as this non-root user.\n\n## Library Dependencies\n\nThe code example does not require any specific library dependencies to execute properly. It only requires Node.js and npm, which are included in the base Docker image (node:14).\n\n## References\n\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
               },
               "properties": {
                 "tags": [
-                  "resources.rules.dom-xss-finder"
+                  "dockerfile.security.missing-user-entrypoint.missing-user-entrypoint"
                 ]
               }
             },
             {
-              "id": "glog-542d7c6c-ba99-4176-984f-4766b49e67a1",
+              "id": "glog-265be8fa-509b-47ad-9c7d-93bd1dd0e60a",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nA potential Cross-Site Scripting (XSS) vulnerability can occur when user-controlled data is used in an HTML string. In JavaScript, this can happen when user input is directly concatenated into a string that is then used in a way that can be interpreted as HTML or JavaScript code. This can allow an attacker to inject malicious scripts into web pages viewed by other users, leading to a variety of attacks such as stealing user data, performing actions on behalf of the user, or defacing web content.\n\nIn the provided code snippet, the variable `todo` is directly concatenated into a string that is then logged to the console. If `todo` contains user-controlled data, this could potentially lead to an XSS vulnerability.\n\n## Mitigation Advice\n\nTo mitigate this type of vulnerability, it is recommended to always properly escape user-controlled data before using it in an HTML context. This can be done using built-in JavaScript functions such as `encodeURIComponent` or `encodeURI`. Alternatively, use a trusted library that provides functions for safely encoding user-controlled data.\n\n## Source Code Fix Recommendation\n\nHere is a recommended fix for the provided code snippet:\n\n```javascript\nconsole.log('added ' + encodeURIComponent(todo));\n```\n\nIn this fix, the `encodeURIComponent` function is used to properly escape the `todo` variable before it is concatenated into the string.\n\n## Library Dependencies\n\nThe provided code snippet does not require any library dependencies to execute properly.\n\n## OWASP Resources\n\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
-              },
-              "properties": {
-                "tags": [
-                  "resources.rules.raw-html-concat"
-                ]
-              }
-            },
-            {
-              "id": "glog-0e12125d-2cba-4008-81f5-747c553a9fcf",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nA potential Cross-Site Scripting (XSS) vulnerability can occur when user-controlled data is used in an HTML string. In JavaScript, this can happen when user input is directly concatenated into a string that is then used in a way that can be interpreted as HTML or JavaScript code. This can allow an attacker to inject malicious scripts into web pages viewed by other users, leading to a variety of attacks such as stealing user data, performing actions on behalf of the user, or defacing web content.\n\nIn the provided code snippet, the variable `todo` is directly concatenated into a string that is then logged to the console. If `todo` contains user-controlled data, this could potentially lead to an XSS vulnerability.\n\n## Mitigation Advice\n\nTo mitigate this type of vulnerability, it is recommended to always properly escape user-controlled data before using it in an HTML context. This can be done using built-in JavaScript functions such as `encodeURIComponent` or `encodeURI`. Alternatively, use a trusted library that provides functions for safely encoding user-controlled data.\n\n## Source Code Fix Recommendation\n\nHere is a recommended fix for the provided code snippet:\n\n```javascript\nconsole.log('added ' + encodeURIComponent(todo));\n```\n\nIn this fix, the `encodeURIComponent` function is used to properly escape the `todo` variable before it is concatenated into the string.\n\n## Library Dependencies\n\nThe provided code snippet does not require any library dependencies to execute properly.\n\n## OWASP Resources\n\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
-              },
-              "properties": {
-                "tags": [
-                  "resources.rules.raw-html-concat"
-                ]
-              }
-            },
-            {
-              "id": "glog-1d26624a-a2d5-4e73-ab97-45d3053d6675",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nThe `Math.random()` function in JavaScript is not suitable for generating cryptographic secrets, such as API keys, session tokens, or passwords. This is because it does not provide cryptographically strong randomness and can be predictable, which makes it vulnerable to attacks. Similarly, `crypto.pseudoRandomBytes()` is also not recommended for generating cryptographic secrets due to its potential predictability.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, use `crypto.randomBytes()` instead, which generates cryptographically strong pseudo-random data. This function will return a buffer containing the requested number of random bytes.\n\n## Source Code Fix Recommendation\n\nHere is a fixed version of the code:\n\n```javascript\nconst crypto = require('crypto');\n\nlet user = {\n  name: 'admin',\n  password: crypto.randomBytes(16).toString('hex'),\n  canDelete: true\n};\n```\n\nIn this code, `crypto.randomBytes(16).toString('hex')` generates a 32-character long hexadecimal string, which is suitable for a password.\n\n## Library Dependencies\n\nThe `crypto` module is a built-in module in Node.js, so no additional library dependencies are required.\n\n## References\n\n- [OWASP Top 10 2017: A3-Sensitive Data Exposure](https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure)\n- [CWE-338: Use of Cryptographically Weak PRNG](https://cwe.mitre.org/data/definitions/338.html)"
+                "markdown": "## Description\n\nThe `Math.random()` function in JavaScript is not suitable for cryptographic purposes. It generates pseudo-random numbers using a seed that can be easily predicted, making it vulnerable to attacks. This vulnerability is known as \"Cryptographic Weakness in crypto.pseudoRandomBytes()/Math.random() Random Number Generator\".\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, use a secure random number generator that is suitable for cryptographic purposes. In Node.js, you can use the `crypto.randomBytes()` function, which generates cryptographically strong pseudo-random data.\n\n## Source Code Fix Recommendation\n\nHere is a fixed version of the code:\n\n```javascript\nconst crypto = require('crypto');\n\nlet user = {\n  name: 'admin',\n  password: crypto.randomBytes(16).toString('hex'),\n  canDelete: true\n};\n```\n\nThis code uses the `crypto.randomBytes()` function to generate a secure random password. The `16` argument specifies the number of bytes to generate, and the `'hex'` argument specifies that the output should be a hexadecimal string.\n\n## Library Dependencies\n\nThe fixed code requires the `crypto` module, which is a built-in module in Node.js. No additional library dependencies are required.\n\n## OWASP Resources\n\n- [OWASP Top 10 2017: A3-Sensitive Data Exposure](https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure)\n- [OWASP Cheat Sheet: Password Storage](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-330: Use of Insufficiently Random Values](https://cwe.mitre.org/data/definitions/330.html)"
               },
               "properties": {
                 "tags": [
@@ -180,21 +84,10 @@
               }
             },
             {
-              "id": "glog-71486cc2-7599-414d-ba23-18bf58efaeff",
-              "help": {
-                "text": ""
-              },
-              "properties": {
-                "tags": [
-                  "resources.rules.direct-response-write"
-                ]
-              }
-            },
-            {
-              "id": "glog-744b38d3-0896-45d9-aa65-894b359a5401",
+              "id": "glog-1091216b-49c5-4ad2-be16-e7ac0639e30d",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nThe vulnerability \"JavaScript Sink Vulnerability Detected through User-Input Controlled Parameter Passing\" refers to a situation where an attacker can manipulate the parameters passed to a function in a way that can lead to unexpected behavior or security issues. In the context of JavaScript, this can often occur when user input is not properly sanitized or validated before being used in a function.\n\nIn the provided code snippet, there doesn't seem to be a direct vulnerability as the response status and message are hardcoded and do not rely on user input. However, if the status code or error message were to be controlled by user input, it could potentially lead to an issue.\n\n## Mitigation Advice\n\nTo mitigate this type of vulnerability, it is important to always validate and sanitize user input before using it in your code. This can help prevent a variety of attacks, including Cross-Site Scripting (XSS) and SQL Injection.\n\n## Source Code Fix Recommendation\n\nAs mentioned, the provided code snippet does not seem to have a direct vulnerability. However, if the status code or error message were to be controlled by user input, you should validate and sanitize the input. Here's an example of how you might do this:\n\n```javascript\nlet userStatusCode = getUserInput(); // This is a placeholder function\nlet userErrorMessage = getUserInput(); // This is a placeholder function\n\nif (isValidStatusCode(userStatusCode) && isValidErrorMessage(userErrorMessage)) {\n    res.status(userStatusCode).send({ ok: false, error: userErrorMessage });\n} else {\n    res.status(403).send({ ok: false, error: 'Invalid input' });\n}\n```\n\nIn this example, `isValidStatusCode` and `isValidErrorMessage` are placeholder functions that you would need to implement. They should check that the user input is safe and matches the expected format.\n\n## Library Dependencies\n\nThe provided code snippet appears to use the Express.js library for handling HTTP requests and responses. Therefore, Express.js would be a required dependency.\n\n## OWASP Resources\n\n- [OWASP Top 10 2017: Injection](https://owasp.org/www-project-top-ten/2017/A1_2017-Injection)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-20: Improper Input Validation](https://cwe.mitre.org/data/definitions/20.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+                "markdown": "## Description\n\nThe \"JavaScript Sink Vulnerability Detected through User-Input Controlled Parameter Passing\" vulnerability refers to a situation where an attacker can manipulate user-input controlled parameters to inject malicious scripts. In the provided code snippet, the `replace` function is used to remove newline characters from the `time` variable. If the `time` variable is controlled by user input, it could be manipulated to include malicious scripts, leading to a Cross-Site Scripting (XSS) attack.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always validate, sanitize, and escape user inputs. Never trust user inputs blindly. Use built-in functions or libraries to sanitize and escape user inputs. Also, use Content Security Policy (CSP) to prevent the execution of inline scripts.\n\n## Source Code Fix Recommendation\n\n```javascript\n// Assuming you have a function to sanitize user inputs\nfunction sanitizeInput(input) {\n    // Implement your sanitization logic here\n    // This is just a placeholder\n    return input.replace(/<[^>]*>?/gm, '');\n}\n\n// Use the sanitizeInput function before using the user input\ntime = sanitizeInput(time);\ntime = time.replace(/\\n$/, '');\n```\n\n## Library Dependencies\n\nThe provided code snippet does not require any library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
               },
               "properties": {
                 "tags": [
@@ -203,10 +96,10 @@
               }
             },
             {
-              "id": "glog-e1cb6e35-e331-4882-b775-9ea7c3a459c6",
+              "id": "glog-65205ac7-4e82-4401-943e-df4ca45e9d2f",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nThe vulnerability \"JavaScript Sink Vulnerability Detected through User-Input Controlled Parameter Passing\" refers to a situation where an attacker can manipulate the parameters passed to a function in a way that can lead to unexpected behavior or security issues. In the context of JavaScript, this can often occur when user input is not properly sanitized or validated before being used in a function.\n\nIn the provided code snippet, there doesn't seem to be a direct vulnerability as the response status and message are hardcoded and do not rely on user input. However, if the status code or error message were to be controlled by user input, it could potentially lead to an issue.\n\n## Mitigation Advice\n\nTo mitigate this type of vulnerability, it is important to always validate and sanitize user input before using it in your code. This can help prevent a variety of attacks, including Cross-Site Scripting (XSS) and SQL Injection.\n\n## Source Code Fix Recommendation\n\nAs mentioned, the provided code snippet does not seem to have a direct vulnerability. However, if the status code or error message were to be controlled by user input, you should validate and sanitize the input. Here's an example of how you might do this:\n\n```javascript\nlet userStatusCode = getUserInput(); // This is a placeholder function\nlet userErrorMessage = getUserInput(); // This is a placeholder function\n\nif (isValidStatusCode(userStatusCode) && isValidErrorMessage(userErrorMessage)) {\n    res.status(userStatusCode).send({ ok: false, error: userErrorMessage });\n} else {\n    res.status(403).send({ ok: false, error: 'Invalid input' });\n}\n```\n\nIn this example, `isValidStatusCode` and `isValidErrorMessage` are placeholder functions that you would need to implement. They should check that the user input is safe and matches the expected format.\n\n## Library Dependencies\n\nThe provided code snippet appears to use the Express.js library for handling HTTP requests and responses. Therefore, Express.js would be a required dependency.\n\n## OWASP Resources\n\n- [OWASP Top 10 2017: Injection](https://owasp.org/www-project-top-ten/2017/A1_2017-Injection)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-20: Improper Input Validation](https://cwe.mitre.org/data/definitions/20.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+                "markdown": "## Description\n\nThe \"JavaScript Sink Vulnerability due to User-Input Controlled Parameter Passing Detected\" vulnerability refers to a situation where an application uses untrusted data in a JavaScript function call without proper validation or escaping. This can lead to various security issues such as Cross-Site Scripting (XSS) attacks, where an attacker can inject malicious scripts into web pages viewed by other users, or even Remote Code Execution (RCE), where an attacker can execute arbitrary code on the server.\n\nIn the provided code snippet, the `todo.content` is directly converted to a base64 string and sent as a response. If `todo.content` is user-controlled and not properly sanitized, it can lead to potential security risks.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always validate and sanitize user inputs. Never trust data received from the user. Use a secure method to handle user inputs, such as using a safe API, which avoids the use of the interpreter entirely or provides a parameterized interface.\n\n## Source Code Fix Recommendation\n\n```javascript\n// Assuming express and body-parser are used\nconst express = require('express');\nconst bodyParser = require('body-parser');\nconst app = express();\n\napp.use(bodyParser.json());\n\napp.post('/todo', (req, res) => {\n  let content = req.body.content;\n  \n  // sanitize the content\n  content = content.replace(/[^a-zA-Z0-9 ]/g, \"\");\n\n  res.status(302).send(Buffer.from(content).toString('base64'));\n});\n```\n\nIn the above code, we sanitize the `content` by removing all non-alphanumeric characters. This is a simple example and real-world applications may require more complex sanitization processes.\n\n## Library Dependencies\n\n- express\n- body-parser\n\n## References\n\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP Unvalidated Redirects and Forwards Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)\n- [CWE-20: Improper Input Validation](https://cwe.mitre.org/data/definitions/20.html)"
               },
               "properties": {
                 "tags": [
@@ -215,7 +108,43 @@
               }
             },
             {
-              "id": "glog-06f1ba09-fa74-4c92-8bed-cd2b953733a2",
+              "id": "glog-af0fe598-96e5-478c-8978-25e76aa17556",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when data enters a web application through an untrusted source, most frequently a web request, and is used to generate dynamic HTML content. The vulnerability is present when the application does not adequately validate input before returning it to the client's browser. In JavaScript, direct writing to the response object can lead to XSS vulnerabilities if the data written to the response is not properly sanitized.\n\nIn the provided code snippet, `res.send(messages);`, the `messages` variable is directly written to the response object. If `messages` contains untrusted data, this could lead to an XSS vulnerability.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always sanitize and escape untrusted data before writing it to the response object. This can be done using various methods, such as using a library that automatically escapes HTML special characters, or manually escaping the characters.\n\n## Source Code Fix Recommendation\n\nHere is a simple fix using the `escape-html` library to sanitize the `messages` variable:\n\n```javascript\nvar escape = require('escape-html');\nres.send(escape(messages));\n```\n\n## Library Dependencies\n\nThe `escape-html` library is required for the code example to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.direct-response-write"
+                ]
+              }
+            },
+            {
+              "id": "glog-a036c850-3629-49ac-ac3d-33436505dabd",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe vulnerability \"JavaScript Sink Vulnerability Detected through User-Input Controlled Parameter Passing\" refers to a situation where an attacker can manipulate the parameters passed to a function or method in JavaScript, potentially leading to harmful consequences such as Cross-Site Scripting (XSS) attacks, SQL Injection, or Remote Code Execution.\n\nIn the provided code snippet, there doesn't seem to be a direct vulnerability as no user input is being directly used. However, if the status code `403` or the error message `'Access denied'` were to be controlled by user input, it could potentially lead to a vulnerability.\n\n## Mitigation Advice\n\nTo mitigate this type of vulnerability, it is recommended to:\n\n1. Always validate, sanitize, and escape user input: Never trust user input and always treat it as potentially malicious. Use built-in functions or trusted libraries to sanitize and escape user input.\n\n2. Use parameterized queries or prepared statements: This can help prevent SQL Injection attacks.\n\n3. Implement proper error handling: Do not reveal sensitive information in error messages.\n\n4. Use Content Security Policy (CSP): This can help prevent XSS attacks.\n\n## Source Code Fix Recommendation\n\nAssuming the status code and error message are controlled by user input, a fix could look like this:\n\n```javascript\nlet statusCode = getUserInput1();\nlet errorMessage = getUserInput2();\n\nif (typeof statusCode !== 'number' || statusCode < 100 || statusCode > 599) {\n    throw new Error('Invalid status code');\n}\n\nif (typeof errorMessage !== 'string' || errorMessage.length > 200) {\n    throw new Error('Invalid error message');\n}\n\nres.status(statusCode).send({ ok: false, error: errorMessage });\n```\n\nIn this fix, we validate the user input before using it. If the input is not valid, we throw an error.\n\n## Library Dependencies\n\nThe provided code snippet seems to be using the Express.js library. Therefore, the following dependency is required:\n\n- Express.js\n\n## OWASP Resources\n\n- [OWASP Top 10 2017: Injection](https://owasp.org/www-project-top-ten/2017/A1_2017-Injection)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)\n- [CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')](https://cwe.mitre.org/data/definitions/89.html)"
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.dom-xss-finder"
+                ]
+              }
+            },
+            {
+              "id": "glog-290ede4f-f5ac-44b5-86ae-7db06be0b57a",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe vulnerability \"JavaScript Sink Vulnerability Detected through User-Input Controlled Parameter Passing\" refers to a situation where an attacker can manipulate the parameters passed to a function or method in JavaScript, potentially leading to harmful consequences such as Cross-Site Scripting (XSS) attacks, SQL Injection, or Remote Code Execution.\n\nIn the provided code snippet, there doesn't seem to be a direct vulnerability as no user input is being directly used. However, if the status code `403` or the error message `'Access denied'` were to be controlled by user input, it could potentially lead to a vulnerability.\n\n## Mitigation Advice\n\nTo mitigate this type of vulnerability, it is recommended to:\n\n1. Always validate, sanitize, and escape user input: Never trust user input and always treat it as potentially malicious. Use built-in functions or trusted libraries to sanitize and escape user input.\n\n2. Use parameterized queries or prepared statements: This can help prevent SQL Injection attacks.\n\n3. Implement proper error handling: Do not reveal sensitive information in error messages.\n\n4. Use Content Security Policy (CSP): This can help prevent XSS attacks.\n\n## Source Code Fix Recommendation\n\nAssuming the status code and error message are controlled by user input, a fix could look like this:\n\n```javascript\nlet statusCode = getUserInput1();\nlet errorMessage = getUserInput2();\n\nif (typeof statusCode !== 'number' || statusCode < 100 || statusCode > 599) {\n    throw new Error('Invalid status code');\n}\n\nif (typeof errorMessage !== 'string' || errorMessage.length > 200) {\n    throw new Error('Invalid error message');\n}\n\nres.status(statusCode).send({ ok: false, error: errorMessage });\n```\n\nIn this fix, we validate the user input before using it. If the input is not valid, we throw an error.\n\n## Library Dependencies\n\nThe provided code snippet seems to be using the Express.js library. Therefore, the following dependency is required:\n\n- Express.js\n\n## OWASP Resources\n\n- [OWASP Top 10 2017: Injection](https://owasp.org/www-project-top-ten/2017/A1_2017-Injection)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)\n- [CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')](https://cwe.mitre.org/data/definitions/89.html)"
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.dom-xss-finder"
+                ]
+              }
+            },
+            {
+              "id": "glog-9f13e523-57ac-4083-8804-27087ff774ea",
               "help": {
                 "text": ""
               },
@@ -226,10 +155,9 @@
               }
             },
             {
-              "id": "glog-1eeb1e0f-46b8-4098-a8ef-8ffc82df56c2",
+              "id": "glog-cfd5bc1b-cbb6-459a-88c4-5e0dd565b038",
               "help": {
-                "text": "",
-                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when data enters a web application through an untrusted source, most frequently a web request, and is used to generate dynamic HTML content. The vulnerability is present when the application does not adequately validate, filter, or encode user input before writing it to the HTML response. In JavaScript, directly writing to the response object can lead to XSS vulnerabilities if the data is not properly sanitized.\n\nIn the provided code snippet, `res.send(messages);`, the application is directly writing user-supplied data (`messages`) to the response object. If `messages` contains malicious script, it could be executed in the browser of any user who views the response, leading to an XSS attack.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always validate and sanitize user input before using it in your application. This can be done using various methods, such as input validation, output encoding, and using appropriate response headers.\n\n## Source Code Fix Recommendation\n\nA simple fix for the provided code snippet would be to sanitize the `messages` before sending it in the response. This can be done using a library like `DOMPurify`.\n\n```javascript\nconst createDOMPurify = require('dompurify');\nconst { JSDOM } = require('jsdom');\n\nconst window = (new JSDOM('')).window;\nconst DOMPurify = createDOMPurify(window);\n\nlet sanitizedMessages = DOMPurify.sanitize(messages);\nres.send(sanitizedMessages);\n```\n\n## Library Dependencies\n\nThe code example requires the following library dependencies:\n\n- `dompurify`\n- `jsdom`\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+                "text": ""
               },
               "properties": {
                 "tags": [
@@ -238,9 +166,10 @@
               }
             },
             {
-              "id": "glog-5a88b43a-ffce-4273-8b54-1e928ce6da13",
+              "id": "glog-fd15f06e-2b07-48cb-bbfd-e04edea67635",
               "help": {
-                "text": ""
+                "text": "",
+                "markdown": "## Description\n\n\"EJS Template XSS Vulnerability Detected Due to Unescaped External Data\" is a vulnerability that occurs when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. This allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nEJS (Embedded JavaScript) templates are a popular templating engine in JavaScript. However, if not used properly, they can lead to Cross-Site Scripting (XSS) vulnerabilities. In the provided code snippet, the `redirectPage` variable is not being escaped, which means that if it contains malicious script, it will be executed.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always escape external data before including it in your HTML. This can be done using the `<%= %>` syntax in EJS, which automatically escapes the output.\n\n## Source Code Fix Recommendation\n\nHere is the fixed version of the code:\n\n```html\n<input type=\"hidden\" name=\"redirectPage\" value=\"<%= redirectPage %>\" />\n```\n\n## Library Dependencies\n\nThe code example requires the following library dependencies:\n\n- EJS\n\n## References\n\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
               },
               "properties": {
                 "tags": [
@@ -249,22 +178,22 @@
               }
             },
             {
-              "id": "glog-4c0fd187-6191-4ee1-be50-d26e9ac11e0b",
+              "id": "glog-3aac506a-487d-461e-8c5b-84f051790784",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\n\"EJS Template XSS Vulnerability Detected Due to Unescaped External Data\" is a vulnerability that occurs when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. This allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided code snippet, the value of `redirectPage` is directly embedded into the HTML without any form of escaping or sanitization. This means that if `redirectPage` contains any malicious scripts, they will be executed when the HTML is rendered in the browser.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always escape untrusted data based on the HTML context (body, attribute, JavaScript, CSS, or URL) that the data will be placed into. In this case, since `redirectPage` is being used in an HTML attribute context, it should be HTML attribute escaped.\n\n## Source Code Fix Recommendation\n\nYou can use the `escape` function provided by EJS to escape the `redirectPage`:\n\n```html\n<input type=\"hidden\" name=\"redirectPage\" value=\"<%= escape(redirectPage) %>\" />\n```\n\n## Library Dependencies\n\nThe code example requires the following library dependencies:\n\n- EJS\n\n## References\n\n- [OWASP Cross Site Scripting Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+                "markdown": "## Description\n\nThe `Math.random()` function in JavaScript is not suitable for generating cryptographically secure random numbers. This is because it is a pseudorandom number generator, which means it uses an algorithm to generate a sequence of numbers that only approximates the properties of random numbers. The sequence of numbers generated by `Math.random()` can be predicted if the initial seed used by the algorithm is known. This makes it unsuitable for tasks that require a high level of security, such as generating random keys or tokens in a cryptographic context.\n\nThe `crypto.pseudoRandomBytes()` function in Node.js is also not suitable for generating cryptographically secure random numbers. This function generates pseudorandom bytes, but it does not guarantee that the bytes are unpredictable or evenly distributed, which are important properties for cryptographic security.\n\n## Mitigation Advice\n\nTo generate cryptographically secure random numbers in JavaScript, you can use the `crypto.randomBytes()` function in Node.js or the `window.crypto.getRandomValues()` function in a browser context. These functions generate random numbers that are suitable for cryptographic use.\n\n## Source Code Fix Recommendation\n\nHere is how you can fix the code using `crypto.randomBytes()`:\n\n```javascript\nconst crypto = require('crypto');\n\nfunction secureRandom(min, max) {\n    var range = max - min;\n    var randomBuffer = crypto.randomBytes(4);\n    var randomValue = randomBuffer.readUInt32BE(0, true);\n    return min + (randomValue % range);\n}\n\nreturn secureRandom(min, max);\n```\n\n## Library Dependencies\n\nThe code example requires the `crypto` module, which is a built-in module in Node.js.\n\n## References\n\n- [CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)](https://cwe.mitre.org/data/definitions/338.html)"
               },
               "properties": {
                 "tags": [
-                  "javascript.express.security.audit.xss.ejs.explicit-unescape.template-explicit-unescape"
+                  "resources.rules.node_insecure_random_generator"
                 ]
               }
             },
             {
-              "id": "glog-08c23a34-44c7-40ef-a581-ed7499ce0250",
+              "id": "glog-d00a7524-5337-494b-8bb0-6ea9edf8b847",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\n\"Unescape Detected in Mustache Template Leading to Potential XSS Vulnerability\" is a security vulnerability in JavaScript that occurs when user input is directly embedded into a Mustache template without proper sanitization or encoding. This can lead to Cross-Site Scripting (XSS) attacks, where an attacker can inject malicious scripts into web pages viewed by other users. These scripts can steal sensitive information, manipulate web content, or perform actions on behalf of the user without their consent.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always escape user input that is embedded in templates. This can be done by using the double curly braces `{{ }}` instead of triple curly braces `{{{ }}}` in Mustache templates. The double curly braces will automatically escape HTML entities, preventing XSS attacks.\n\n## Source Code Fix Recommendation\n\nReplace:\n\n```javascript\n{{{body}}}\n```\n\nwith:\n\n```javascript\n{{body}}\n```\n\n## Library Dependencies\n\nThe code example requires the following library:\n\n- Mustache.js\n\n## References\n\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+                "markdown": "## Description\n\nIn JavaScript, Mustache is a popular templating system that is often used to generate HTML. However, if user input is not properly escaped, it can lead to Cross-Site Scripting (XSS) vulnerabilities. This happens when the triple mustache `{{{ }}}` is used in Mustache templates, which tells Mustache to render the data unescaped. This means that if the data contains any HTML or JavaScript, it will be executed by the browser, potentially leading to an XSS attack.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, always escape user input that is included in a Mustache template. This can be done by using the double mustache `{{ }}` instead of the triple mustache. The double mustache tells Mustache to escape any HTML or JavaScript in the data, preventing it from being executed by the browser.\n\n## Source Code Fix Recommendation\n\nReplace:\n\n```javascript\n{{{body}}}\n```\n\nwith:\n\n```javascript\n{{body}}\n```\n\n## Library Dependencies\n\nThe code example requires the following library:\n\n- Mustache.js\n\n## References\n\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
               },
               "properties": {
                 "tags": [
@@ -273,22 +202,22 @@
               }
             },
             {
-              "id": "glog-e17afdb1-0620-4416-9fb7-9eea7b24b441",
+              "id": "glog-39ed3dd0-ea6a-40b1-92a6-b4628a90217a",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nThe `Math.random()` function in JavaScript is not suitable for generating cryptographic secure random numbers. This is because it is a pseudorandom number generator and its output can be predicted if the initial seed is known. This makes it vulnerable to attacks where an attacker can predict the output of `Math.random()` and compromise the security of the application.\n\nThe `crypto.pseudoRandomBytes()` function in Node.js is also not suitable for generating cryptographic secure random numbers. It generates pseudorandom data, which is not suitable for cryptographic use.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, use a function that generates cryptographically secure random numbers. In Node.js, you can use the `crypto.randomBytes()` function. In the browser, you can use the `window.crypto.getRandomValues()` function.\n\n## Source Code Fix Recommendation\n\nHere is how you can fix the code:\n\n```javascript\n// Node.js\nconst crypto = require('crypto');\n\nfunction secureRandom(min, max) {\n    var random = crypto.randomBytes(1)[0]/256;\n    return Math.floor(random * (max - min + 1)) + min;\n}\n\n// Browser\nfunction secureRandom(min, max) {\n    var random = window.crypto.getRandomValues(new Uint8Array(1))[0]/256;\n    return Math.floor(random * (max - min + 1)) + min;\n}\n```\n\n## Library Dependencies\n\nThe Node.js code requires the built-in `crypto` module. The browser code does not require any library dependencies.\n\n## OWASP Resources\n\n- [OWASP Top 10 2017: A3-Sensitive Data Exposure](https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-330: Use of Insufficiently Random Values](https://cwe.mitre.org/data/definitions/330.html)"
+                "markdown": "## Description\n\n\"EJS Template XSS Vulnerability Detected Due to Unescaped External Data\" is a vulnerability that occurs when unescaped external data is used in an EJS template. EJS (Embedded JavaScript) is a simple templating language that lets you generate HTML markup with plain JavaScript. However, if user-supplied data is not properly sanitized before being used in an EJS template, it can lead to Cross-Site Scripting (XSS) attacks. In XSS attacks, an attacker can inject malicious scripts into web pages viewed by other users, which can lead to a variety of attacks such as stealing user data, defacing web sites, or performing actions on behalf of the user.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always escape user-supplied data before using it in an EJS template. This can be done using the `<%= %>` syntax in EJS, which automatically escapes HTML characters.\n\n## Source Code Fix Recommendation\n\nReplace `<%- body %>` with `<%= body %>`. The `<%= %>` syntax automatically escapes HTML characters, preventing XSS attacks.\n\n## Library Dependencies\n\nThe code example requires the `ejs` library to execute properly.\n\n## OWASP and CWE Links\n\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
               },
               "properties": {
                 "tags": [
-                  "resources.rules.node_insecure_random_generator"
+                  "javascript.express.security.audit.xss.ejs.explicit-unescape.template-explicit-unescape"
                 ]
               }
             },
             {
-              "id": "glog-8458cecf-a35c-4a02-8d90-0601dff4be64",
+              "id": "glog-476df468-e692-45b9-a2d4-1877432e849b",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nThe EJS (Embedded JavaScript) Template XSS (Cross-Site Scripting) Vulnerability is a security flaw that occurs when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. This allows attackers to execute malicious scripts in the browser of the end user by injecting malicious code into the page.\n\nIn the provided code snippet, the `marked` function is used to parse markdown content from `todo.content` and it is directly embedded into the HTML using `<%- %>` syntax, which does not escape the HTML content. If `todo.content` contains any malicious script, it will be executed in the user's browser.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, always escape untrusted data based on the HTML context (body, attribute, JavaScript, CSS, or URL) that the data will be placed into. In EJS, use `<%= %>` syntax to output the data, which will automatically escape the HTML content.\n\n## Source Code Fix Recommendation\n\nHere is the fixed code:\n\n```html\n<a class=\"update-link\" href=\"/edit/<%= todo._id %>\" title=\"Update this todo item\"><%= marked(new String(todo.content)) %></a>\n```\n\n## Library Dependencies\n\nThe code example requires the following library dependencies:\n\n- EJS: A templating engine for JavaScript.\n- Marked: A markdown parser and compiler.\n\n## References\n\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+                "markdown": "## Description\n\nThe EJS Template XSS Vulnerability is a type of Cross-Site Scripting (XSS) vulnerability that occurs when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. This vulnerability can allow attackers to execute malicious scripts in the victim's browser which can lead to a variety of attacks such as stealing user sessions, defacing web sites, or redirecting the user to malicious sites.\n\nIn the provided code snippet, the vulnerability arises from the use of unescaped external data (`todo.content`) in the EJS template. This can potentially allow an attacker to inject malicious scripts through `todo.content`.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always escape untrusted data based on the HTML context (body, attribute, JavaScript, CSS, or URL) that the data will be placed into. In addition, use secure coding practices such as input validation, least privilege, and secure defaults.\n\n## Source Code Fix Recommendation\n\nIn the provided code snippet, you can mitigate the vulnerability by escaping the `todo.content` using the `<%- %>` syntax in EJS which outputs the value of the variable and escapes any HTML:\n\n```html\n<a class=\"update-link\" href=\"/edit/<%= todo._id %>\" title=\"Update this todo item\"><%- todo.content %></a>\n```\n\n## Library Dependencies\n\nThe code example requires the following library dependencies:\n\n- Express.js: A web application framework for Node.js.\n- EJS: A simple templating language that lets you generate HTML markup with plain JavaScript.\n- Marked: A markdown parser and compiler built for speed.\n\n## References\n\n- [OWASP Cross-Site Scripting (XSS)](https://owasp.org/www-community/attacks/xss/)\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
               },
               "properties": {
                 "tags": [
@@ -308,7 +237,7 @@
       "language": "en-US",
       "results": [
         {
-          "ruleId": "glog-ea7b690b-6786-40a1-b4ae-00a5e694e203",
+          "ruleId": "glog-bff0f977-e3aa-4843-b756-54b9b7499205",
           "kind": "fail",
           "level": "warning",
           "message": {
@@ -339,162 +268,7 @@
           "properties": {}
         },
         {
-          "ruleId": "glog-ca101dcf-e7b7-4d4d-a2d2-8b106efbac40",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "Potential Root User Exploitation in Docker Container"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "Dockerfile",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 13,
-                  "startColumn": 1,
-                  "endLine": 13,
-                  "endColumn": 28,
-                  "snippet": {
-                    "text": "ENTRYPOINT [\"npm\", \"start\"]"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "03e569d33136470730d1bb7c2aadebfd578f57db0251b5c961e4bb6f74a7b06915605c7bb0f8c4c06c623b529e84fd4a3b1b42ab4ae1d765428edc6569b48a42_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "glog-1ffd9386-a599-43b9-8193-18997425ecc1",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'goof-mongo' Service Privilege Escalation Vulnerability through setuid/setgid Binaries"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "docker-compose.yml",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 15,
-                  "startColumn": 3,
-                  "endLine": 15,
-                  "endColumn": 13,
-                  "snippet": {
-                    "text": "  goof-mongo:"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "c6ed8d91a46e8447c699d16ef63a621f28258a5bc5e7e0cdc1a317e9cec74dec0d93e63cb71d238f3b7a5ffd937ba9a0f218a9c7c64629d8df410acc5f61382e_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "glog-b166fd0f-ba19-4969-91c9-b1e4ed582586",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Goof-mongo' Service Privilege Escalation Vulnerability via Setuid/Setgid Binaries"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "docker-compose.yml",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 15,
-                  "startColumn": 3,
-                  "endLine": 19,
-                  "endColumn": 22,
-                  "snippet": {
-                    "text": "  goof-mongo:\n    container_name: goof-mongo\n    image: mongo:3\n    ports:\n      - \"27017:27017\""
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "4caeecf5665e6276c6d07ec40fb7cacd09d2cb3b6b84aba51a3aa9164458d6fc9c14f0f114eb1348d612643af90863c76f7ea42daa67c09d35fba8b805a0df02_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "glog-ec4829c2-11fe-486c-8cc5-908ba01abc65",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "Privilege Escalation Vulnerability in 'good-mysql' Service"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "docker-compose.yml",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 20,
-                  "startColumn": 3,
-                  "endLine": 20,
-                  "endColumn": 13,
-                  "snippet": {
-                    "text": "  good-mysql:"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "4608bc3c70fd96076108118ef77ee5305faf2771f339b73fdd46f0a24451b049643c01bfc4de6522af237f753a3f14ef34b565c05eb100a874fa9b60149a1e62_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "glog-7dce8a5e-e107-4368-8e28-c6a664f4e1d5",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Good-mysql' service privilege escalation vulnerability through setuid or setgid binaries."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "docker-compose.yml",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 20,
-                  "startColumn": 3,
-                  "endLine": 27,
-                  "endColumn": 20,
-                  "snippet": {
-                    "text": "  good-mysql:\n    container_name: goof-mysql\n    image: mysql:5\n    environment:\n      MYSQL_ROOT_PASSWORD: root\n      MYSQL_DATABASE: acme\n    ports:\n      - \"3306:3306\""
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "f565c1620608f0d7439f3d64715df17ca681a103fa0ae8fb7214aa1dcb4a30bf242325bf219fcc80c0c023ea816b2e1203479b0224e30ac3a2ded7896efcbad6_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "glog-73cebbdd-ab9a-456d-a391-65d19e5bfde7",
+          "ruleId": "glog-a2af60da-7a80-410e-8ace-b121ace6f7e7",
           "kind": "fail",
           "level": "warning",
           "message": {
@@ -525,7 +299,7 @@
           "properties": {}
         },
         {
-          "ruleId": "glog-5fab6080-0f29-47ff-b8dc-71ca4473e144",
+          "ruleId": "glog-86571f38-63ff-44ba-968c-6c2c1abab408",
           "kind": "fail",
           "level": "warning",
           "message": {
@@ -556,38 +330,7 @@
           "properties": {}
         },
         {
-          "ruleId": "glog-c776bc1d-bbdd-4969-9253-831315cf93d0",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "\"JavaScript Sink Vulnerability Detected through User-Input Controlled Parameter Passing\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "routes/index.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 137,
-                  "startColumn": 12,
-                  "endLine": 137,
-                  "endColumn": 35,
-                  "snippet": {
-                    "text": "    time = time.replace(/\\n$/, '');"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "837fb74ab0ccb7ff61fe658da279f5e416474622759c679ac4a63c038fed16ec920117bc53c0f493271333a81af98632f636baab227e4e3a87c04b55fc1b581e_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "glog-8c58897b-2e35-4044-81cb-fc19e6f589d5",
+          "ruleId": "glog-4d250cf6-a086-4860-8ca9-9ff7584442d2",
           "kind": "fail",
           "level": "warning",
           "message": {
@@ -618,104 +361,42 @@
           "properties": {}
         },
         {
-          "ruleId": "glog-bf1a6e8e-41cf-48d0-aa4f-d448557e9c71",
+          "ruleId": "glog-aab1adac-584c-48da-89f0-f02bd77f802e",
           "kind": "fail",
           "level": "warning",
           "message": {
-            "text": "\"JavaScript Sink Vulnerability Detected through User-Input Control Parameter\""
+            "text": "Potential Root User Exploitation in Docker Container"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "routes/index.js",
+                  "uri": "Dockerfile",
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 184,
-                  "startColumn": 5,
-                  "endLine": 184,
-                  "endColumn": 58,
+                  "startLine": 13,
+                  "startColumn": 1,
+                  "endLine": 13,
+                  "endColumn": 28,
                   "snippet": {
-                    "text": "    res.status(302).send(todo.content.toString('base64'));"
+                    "text": "ENTRYPOINT [\"npm\", \"start\"]"
                   }
                 }
               }
             }
           ],
           "fingerprints": {
-            "matchBasedId/v1": "7d3dca3f47eac80b6526faf3fac43866a2c2eecd1a4fd0bc6122aee52bb940dce0056db7b4801cc68a6d251dd12142a134d66c7628f66b87b4551bccaf23da9a_0"
+            "matchBasedId/v1": "03e569d33136470730d1bb7c2aadebfd578f57db0251b5c961e4bb6f74a7b06915605c7bb0f8c4c06c623b529e84fd4a3b1b42ab4ae1d765428edc6569b48a42_0"
           },
           "properties": {}
         },
         {
-          "ruleId": "glog-542d7c6c-ba99-4176-984f-4766b49e67a1",
+          "ruleId": "glog-265be8fa-509b-47ad-9c7d-93bd1dd0e60a",
           "kind": "fail",
           "level": "warning",
           "message": {
-            "text": "\"Potential XSS Vulnerability from User-Controlled Data in HTML String\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "routes/index.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 290,
-                  "startColumn": 9,
-                  "endLine": 290,
-                  "endColumn": 37,
-                  "snippet": {
-                    "text": "        console.log('added ' + todo);"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "cc81ac8681a299a56479ee256c4e7762d5a23a3cfdd00f295281749de66d88d679d9d86c942f78a5c8e88cac47e3fa2b628e98dd8d4f1078d5e57d1f00b5dddc_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "glog-0e12125d-2cba-4008-81f5-747c553a9fcf",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "\"Potential XSS Vulnerability from User-Controlled Data in HTML String\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "routes/index.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 290,
-                  "startColumn": 9,
-                  "endLine": 290,
-                  "endColumn": 38,
-                  "snippet": {
-                    "text": "        console.log('added ' + todo);"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "cc81ac8681a299a56479ee256c4e7762d5a23a3cfdd00f295281749de66d88d679d9d86c942f78a5c8e88cac47e3fa2b628e98dd8d4f1078d5e57d1f00b5dddc_1"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "glog-1d26624a-a2d5-4e73-ab97-45d3053d6675",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "\"Crypto.pseudoRandomBytes()/Math.random() exhibits cryptographic weakness.\""
+            "text": "\"Cryptographic Weakness in crypto.pseudoRandomBytes()/Math.random() Random Number Generator\""
           },
           "locations": [
             {
@@ -742,38 +423,7 @@
           "properties": {}
         },
         {
-          "ruleId": "glog-71486cc2-7599-414d-ba23-18bf58efaeff",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "Invalid input."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "routes/index.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 354,
-                  "startColumn": 5,
-                  "endLine": 354,
-                  "endColumn": 27,
-                  "snippet": {
-                    "text": "    res.send({ ok: true });"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "5e69ac40a767d7ede9b9ae43ebc95b6e7c88a31098d08aa659aaa5bda1dec7213799a5f89cbce04d5bc7950d7d39af6329e811e7ffb5bb5f910202a6c53dbd3c_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "glog-744b38d3-0896-45d9-aa65-894b359a5401",
+          "ruleId": "glog-1091216b-49c5-4ad2-be16-e7ac0639e30d",
           "kind": "fail",
           "level": "warning",
           "message": {
@@ -787,28 +437,28 @@
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 338,
-                  "startColumn": 7,
-                  "endLine": 338,
-                  "endColumn": 66,
+                  "startLine": 137,
+                  "startColumn": 12,
+                  "endLine": 137,
+                  "endColumn": 35,
                   "snippet": {
-                    "text": "      res.status(403).send({ ok: false, error: 'Access denied' });"
+                    "text": "    time = time.replace(/\\n$/, '');"
                   }
                 }
               }
             }
           ],
           "fingerprints": {
-            "matchBasedId/v1": "1ea3444a97c0c0eb7ac562ca4eebde88b0822a50ee3a5b0b15807c6318c42fefc5d11c6346e8d5cfac8327683163253d9fecdca26dab931361fc453e9a374a22_0"
+            "matchBasedId/v1": "837fb74ab0ccb7ff61fe658da279f5e416474622759c679ac4a63c038fed16ec920117bc53c0f493271333a81af98632f636baab227e4e3a87c04b55fc1b581e_0"
           },
           "properties": {}
         },
         {
-          "ruleId": "glog-e1cb6e35-e331-4882-b775-9ea7c3a459c6",
+          "ruleId": "glog-65205ac7-4e82-4401-943e-df4ca45e9d2f",
           "kind": "fail",
           "level": "warning",
           "message": {
-            "text": "\"JavaScript Sink Vulnerability Detected through User-Input Controlled Parameter Passing\""
+            "text": "\"JavaScript Sink Vulnerability due to User-Input Controlled Parameter Passing Detected.\""
           },
           "locations": [
             {
@@ -818,55 +468,24 @@
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 360,
-                  "startColumn": 7,
-                  "endLine": 360,
-                  "endColumn": 66,
-                  "snippet": {
-                    "text": "      res.status(403).send({ ok: false, error: 'Access denied' });"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "66b659d9ac40b2ece693c9e54593653c1a21c01ee327e2693eb3dfb63b97e5fd670df83e442fd8e68cfc90e9e91d86b9ceca6b0d87d810d614dd92a15dd9cef6_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "glog-06f1ba09-fa74-4c92-8bed-cd2b953733a2",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "Invalid input."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "routes/index.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 365,
+                  "startLine": 184,
                   "startColumn": 5,
-                  "endLine": 365,
-                  "endColumn": 27,
+                  "endLine": 184,
+                  "endColumn": 58,
                   "snippet": {
-                    "text": "    res.send({ ok: true });"
+                    "text": "    res.status(302).send(todo.content.toString('base64'));"
                   }
                 }
               }
             }
           ],
           "fingerprints": {
-            "matchBasedId/v1": "c2ace50695f13f0d435116b57b1162746bf090c77eaab09479ef44717f73d9c0368e57cefa4a24e90e29fa663d1bd21d43a9af0d9a0bc1fb37d23021d2b6972a_0"
+            "matchBasedId/v1": "7d3dca3f47eac80b6526faf3fac43866a2c2eecd1a4fd0bc6122aee52bb940dce0056db7b4801cc68a6d251dd12142a134d66c7628f66b87b4551bccaf23da9a_0"
           },
           "properties": {}
         },
         {
-          "ruleId": "glog-1eeb1e0f-46b8-4098-a8ef-8ffc82df56c2",
+          "ruleId": "glog-af0fe598-96e5-478c-8978-25e76aa17556",
           "kind": "fail",
           "level": "warning",
           "message": {
@@ -897,7 +516,69 @@
           "properties": {}
         },
         {
-          "ruleId": "glog-5a88b43a-ffce-4273-8b54-1e928ce6da13",
+          "ruleId": "glog-a036c850-3629-49ac-ac3d-33436505dabd",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"JavaScript Sink Vulnerability Detected through User-Input Controlled Parameter Passing\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "routes/index.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 338,
+                  "startColumn": 7,
+                  "endLine": 338,
+                  "endColumn": 66,
+                  "snippet": {
+                    "text": "      res.status(403).send({ ok: false, error: 'Access denied' });"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "1ea3444a97c0c0eb7ac562ca4eebde88b0822a50ee3a5b0b15807c6318c42fefc5d11c6346e8d5cfac8327683163253d9fecdca26dab931361fc453e9a374a22_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-290ede4f-f5ac-44b5-86ae-7db06be0b57a",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"JavaScript Sink Vulnerability Detected through User-Input Controlled Parameter Passing\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "routes/index.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 360,
+                  "startColumn": 7,
+                  "endLine": 360,
+                  "endColumn": 66,
+                  "snippet": {
+                    "text": "      res.status(403).send({ ok: false, error: 'Access denied' });"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "66b659d9ac40b2ece693c9e54593653c1a21c01ee327e2693eb3dfb63b97e5fd670df83e442fd8e68cfc90e9e91d86b9ceca6b0d87d810d614dd92a15dd9cef6_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-9f13e523-57ac-4083-8804-27087ff774ea",
           "kind": "fail",
           "level": "warning",
           "message": {
@@ -907,28 +588,59 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "views/layout.ejs",
+                  "uri": "routes/index.js",
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 12,
-                  "startColumn": 7,
-                  "endLine": 12,
-                  "endColumn": 18,
+                  "startLine": 365,
+                  "startColumn": 5,
+                  "endLine": 365,
+                  "endColumn": 27,
                   "snippet": {
-                    "text": "      <%- body %>"
+                    "text": "    res.send({ ok: true });"
                   }
                 }
               }
             }
           ],
           "fingerprints": {
-            "matchBasedId/v1": "a95e1ffc66e76fa5739bc59d0482027cda57a46d0bf7bfee58d0f5d3d407a68805aa4f828240ec732e343c4bfea98de3ea74e76e35ceaf8846a2908d7d9d8bb0_0"
+            "matchBasedId/v1": "c2ace50695f13f0d435116b57b1162746bf090c77eaab09479ef44717f73d9c0368e57cefa4a24e90e29fa663d1bd21d43a9af0d9a0bc1fb37d23021d2b6972a_0"
           },
           "properties": {}
         },
         {
-          "ruleId": "glog-4c0fd187-6191-4ee1-be50-d26e9ac11e0b",
+          "ruleId": "glog-cfd5bc1b-cbb6-459a-88c4-5e0dd565b038",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Invalid input."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "routes/index.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 354,
+                  "startColumn": 5,
+                  "endLine": 354,
+                  "endColumn": 27,
+                  "snippet": {
+                    "text": "    res.send({ ok: true });"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "5e69ac40a767d7ede9b9ae43ebc95b6e7c88a31098d08aa659aaa5bda1dec7213799a5f89cbce04d5bc7950d7d39af6329e811e7ffb5bb5f910202a6c53dbd3c_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-fd15f06e-2b07-48cb-bbfd-e04edea67635",
           "kind": "fail",
           "level": "warning",
           "message": {
@@ -959,42 +671,11 @@
           "properties": {}
         },
         {
-          "ruleId": "glog-08c23a34-44c7-40ef-a581-ed7499ce0250",
+          "ruleId": "glog-3aac506a-487d-461e-8c5b-84f051790784",
           "kind": "fail",
           "level": "warning",
           "message": {
-            "text": "\"Unescape Detected in Mustache Template Leading to Potential XSS Vulnerability\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "views/layout.hbs",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 12,
-                  "startColumn": 7,
-                  "endLine": 12,
-                  "endColumn": 17,
-                  "snippet": {
-                    "text": "      {{{body}}}"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "4ff9b5d5756fb4ffaba65b9392ccda1096d1fecc4bb09f26f13aa05f5472c9149847b33f9592f298dca8553c551cfae15600fbee7e34db6eefe8011d4e5fe220_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "glog-e17afdb1-0620-4416-9fb7-9eea7b24b441",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "\"Cryptographic Weakness in crypto.pseudoRandomBytes()/Math.random() Random Number Generator\""
+            "text": "\"Crypto.pseudoRandomBytes()/Math.random() exhibits cryptographic weakness.\""
           },
           "locations": [
             {
@@ -1021,7 +702,69 @@
           "properties": {}
         },
         {
-          "ruleId": "glog-8458cecf-a35c-4a02-8d90-0601dff4be64",
+          "ruleId": "glog-d00a7524-5337-494b-8bb0-6ea9edf8b847",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Unescaped Input in Mustache Template Leading to XSS Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "views/layout.hbs",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 12,
+                  "startColumn": 7,
+                  "endLine": 12,
+                  "endColumn": 17,
+                  "snippet": {
+                    "text": "      {{{body}}}"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "4ff9b5d5756fb4ffaba65b9392ccda1096d1fecc4bb09f26f13aa05f5472c9149847b33f9592f298dca8553c551cfae15600fbee7e34db6eefe8011d4e5fe220_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-39ed3dd0-ea6a-40b1-92a6-b4628a90217a",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "EJS Template XSS Vulnerability Detected Due to Unescaped External Data"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "views/layout.ejs",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 12,
+                  "startColumn": 7,
+                  "endLine": 12,
+                  "endColumn": 18,
+                  "snippet": {
+                    "text": "      <%- body %>"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "a95e1ffc66e76fa5739bc59d0482027cda57a46d0bf7bfee58d0f5d3d407a68805aa4f828240ec732e343c4bfea98de3ea74e76e35ceaf8846a2908d7d9d8bb0_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-476df468-e692-45b9-a2d4-1877432e849b",
           "kind": "fail",
           "level": "warning",
           "message": {
